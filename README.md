@@ -1,11 +1,14 @@
-## Run API
+# Java levelup - Beanhub
+Beanhub is a platform where bean enthusiasts can share bean-related recipes with one-another.
+
+## To run the API
 ```cmd
 cd api
 ./gradlew
 ./gradlew bootRun
 ```
 
-## Run Client
+## To run the Client
 ```cmd
 IDFK??
 ```
