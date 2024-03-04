@@ -17,3 +17,13 @@ secret_key = "YOUR_SECRET_KEY_HERE"
 db_password = "YOUR_DB_PASSWORD"
 db_username = "YOUR_DB_USERNAME"
 ```
+
+## Apply terraform
+```cli
+terraform apply -var-file="auth.tfvars"
+```
+
+## Destroy terraform
+```cli
+terraform destroy -var-file="auth.tfvars"
+```

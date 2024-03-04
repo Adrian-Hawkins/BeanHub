@@ -37,8 +37,8 @@ resource "aws_security_group" "allow_mssql" {
   }
 }
 
-resource "aws_db_instance" "tutordb" {
-  identifier             = "tutordb"
+resource "aws_db_instance" "beanhub" {
+  identifier             = "beanhub"
   engine                 = "sqlserver-ex"
   engine_version         = "14.00.3465.1.v1"
   instance_class         = "db.t2.micro"
@@ -49,11 +49,6 @@ resource "aws_db_instance" "tutordb" {
   password               = var.db_password
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.allow_mssql.id]
-#   provisioner "local-exec" {
-#     command = <<-EOT
-#       sqlcmd -S ${self.endpoint} -U ${self.username} -P '${self.password}' -Q "CREATE DATABASE root;";
-#     EOT
-#   }
   tags = {
     owner         = "adrian.hawkins@bbd.co.za"
     created-using = "terraform"
