@@ -49,7 +49,7 @@ resource "aws_key_pair" "deployer" {
 
 resource "aws_instance" "BeanHub" {
     ami           = "ami-0d940f23d527c3ab1"
-    instance_type = "t3.micro"
+    instance_type = "t2.micro"
     key_name      = aws_key_pair.deployer.key_name
     vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
     tags = {
