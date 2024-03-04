@@ -1,18 +1,14 @@
 name: "Database CI/CD"
  
 on:
-  
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
-    #   - main
-      - FlywaySetup
+        - '*'
+    
       
  
 jobs:
   Migrate:
-    # if: github.event.pull_request.merged == true
     name: RunMigration
     runs-on: ubuntu-20.04         
     steps:
