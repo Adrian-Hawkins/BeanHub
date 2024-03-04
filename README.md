@@ -21,6 +21,16 @@ db_password = "YOUR_DB_PASSWORD"
 db_username = "YOUR_DB_USERNAME"
 ```
 
+## Apply terraform
+```cli
+terraform apply -var-file="auth.tfvars"
+```
+
+## Destroy terraform
+```cli
+terraform destroy -var-file="auth.tfvars"
+```
+
 ## Flyway and database migrations
 **VERY IMPORTANT:**
 - When you add a SQL script, make sure that you place it in the SQL folder, else flywya will ignore it.
@@ -66,3 +76,4 @@ jobs:
       - run: flyway -user="${{ secrets.DB_BUILD_USERNAME }}" -password="${{ secrets.DB_BUILD_PASSWORD }}" -url="${{ secrets.DB_BUILD_URL }}" migrate
 ```
 - This will only run when a PR is approved and merged into main, so **MAKE SURE THAT YOUR SQL IS CORRECT BEFORE MAKING OR APPROVING A PR!!!**
+
