@@ -21,7 +21,12 @@ db_password = "YOUR_DB_PASSWORD"
 db_username = "YOUR_DB_USERNAME"
 ```
 
-## Flyway
+## Flyway and database migrations
+**VERY IMPORTANT:**
+- When you add a SQL script, make sure that you place it in the SQL folder, else flywya will ignore it.
+- Name your script like this: `VYYYYMMDDHHmm__<ScriptName>.sql` (The dateTime accurate to the minute, 2 underscores and your script's name)
+
+
 Make sure that these are valid in github secrets:
 - DB_BUILD_USERNAME
 - DB_BUILD_PASSWORD
@@ -60,3 +65,4 @@ jobs:
       - run: flyway -user="${{ secrets.DB_BUILD_USERNAME }}" -password="${{ secrets.DB_BUILD_PASSWORD }}" -url="${{ secrets.DB_BUILD_URL }}" info
       - run: flyway -user="${{ secrets.DB_BUILD_USERNAME }}" -password="${{ secrets.DB_BUILD_PASSWORD }}" -url="${{ secrets.DB_BUILD_URL }}" migrate
 ```
+- This will only run when a PR is approved and merged into main, so **MAKE SURE THAT YOUR SQL IS CORRECT BEFORE MAKING OR APPROVING A PR!!!**
