@@ -22,5 +22,6 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: |
-        cd Client
+        cd BeanHub.Client
+        ./gradlew
         ./gradlew build

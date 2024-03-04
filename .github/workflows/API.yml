@@ -22,7 +22,7 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: |
-        cd api
+        cd BeanHub.API
         ./gradlew
         ./gradlew build
     
@@ -31,7 +31,7 @@ jobs:
     
     - name: Build Docker image
       run: |
-        cd api
+        cd BeanHub.API
         docker build -t ${{secrets.DOCKER_USERNAME}}/beanstest .
         docker push ${{secrets.DOCKER_USERNAME}}/beanstest:latest
   deploy_api:
