@@ -8,8 +8,6 @@ on:
 jobs:
   build_api:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -23,7 +21,6 @@ jobs:
     # This is wack AF, WTF
     - name: Inject application.yml
       run: |
-        cd Beanhub.API
         echo "spring:" > ./Beanhub.API/src/main/resources/application.yml
         echo "  datasource:" >> ./Beanhub.API/src/main/resources/application.yml
         echo "    url: ${{ secrets.DB_BUILD_URL }}" >> ./Beanhub.API/src/main/resources/application.yml
