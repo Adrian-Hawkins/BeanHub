@@ -29,7 +29,7 @@ public class RecipeIngredientsService {
         entityManager.remove(entityManager.contains(recipeIngredient) ? recipeIngredient : entityManager.merge(recipeIngredient));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public RecipeIngredients getRecipeIngredientById(Integer recipeIngredientsId) {
         return entityManager.find(RecipeIngredients.class, recipeIngredientsId);
     }
