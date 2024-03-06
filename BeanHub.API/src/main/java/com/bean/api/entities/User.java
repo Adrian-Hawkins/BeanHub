@@ -1,7 +1,16 @@
 package com.bean.api.classes;
 
-public class Person {
+import jakarta.persistence.*;
+
+@Entity
+@Table("User")
+public class User {
+    @OneToMany()
     private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long User_ID;
+
 
     public String getName() {
         return name;
