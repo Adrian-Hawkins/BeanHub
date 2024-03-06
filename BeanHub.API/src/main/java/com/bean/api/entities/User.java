@@ -1,22 +1,30 @@
-package com.bean.api.classes;
+package com.bean.api.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table("User")
+@Table(name = "[User]") // Use name="[User]" to specify the table name
 public class User {
-    @OneToMany()
-    private String name;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long User_ID;
+    private Integer userId;
 
+    private String username;
 
-    public String getName() {
-        return name;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
