@@ -24,7 +24,7 @@ jobs:
     # This is wack AF, WTF
     - name: Inject application.yml
       run: |
-        cd BeanHub.API\src\main\resources
+        cd ./Beanhub.API/src/main/resources
         echo "spring:" > application.yml
         echo "  datasource:" >> application.yml
         echo "    url: ${{ secrets.DB_BUILD_URL }}" >> application.yml
