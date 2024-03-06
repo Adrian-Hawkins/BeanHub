@@ -30,14 +30,6 @@ jobs:
         echo "    username: ${{ secrets.DB_BUILD_USERNAME }}" >> ./application.yml
         echo "    password: ${{ secrets.DB_BUILD_PASSWORD }}" >> ./application.yml
         echo "    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver" >> ./application.yml
-      
-    - name: test
-      run: |
-        ls
-        echo "dfdsf"
-        cd ./Beanhub.API
-        ls -d */
-
 
     - name: Build with Gradle Wrapper
       run: |
