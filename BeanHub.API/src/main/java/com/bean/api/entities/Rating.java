@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Rating")
+@Table(name = "[Rating]")
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
