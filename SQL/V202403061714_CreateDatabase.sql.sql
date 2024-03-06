@@ -1,4 +1,4 @@
-USE BeanHubDB;
+USE BeanHub;
 GO
 
 CREATE TABLE [User] (
