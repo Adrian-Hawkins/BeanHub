@@ -32,7 +32,7 @@ jobs:
       run: |
         ls
         echo "dfdsf"
-        cd ./Beanhub.API/src/main
+        cd ./Beanhub.API/src
         ls -d */
 
 
