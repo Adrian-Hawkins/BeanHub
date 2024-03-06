@@ -11,18 +11,24 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
+import client.util.Auth;
 public class App {
 
-    private static final String BASE_URL = "http://localhost:8080";
-
-    public String getGreeting() {
-        return "Hello World!";
-    }
+    private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
+    private static Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
     public static void main(String[] args) {
-        // System.out.println(new App().getGreeting());
-        System.out.println(System.getProperty("user.name"));
+        System.out.println("Base URL: " + BASE_URL);
+        try {
+            Authentication.GetCode();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
     }
+
 
 }
