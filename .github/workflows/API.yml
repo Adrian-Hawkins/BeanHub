@@ -32,6 +32,9 @@ jobs:
       run: |
         pwd
         ls
+        echo "dfdsf"
+        cd BeanHub.API
+        ls
 
 
     - name: Build with Gradle Wrapper
