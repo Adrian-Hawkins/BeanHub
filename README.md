@@ -10,7 +10,9 @@ cd api
 
 ## To run the Client
 ```cmd
-IDFK??
+cd BeanHub.Client
+./gradlew
+./gradlew app:run   
 ```
 
 ## auth.tfvars
