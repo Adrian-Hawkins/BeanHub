@@ -6,7 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "[Recipe]")
@@ -24,6 +27,9 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "User_ID", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 
     public Integer getRecipeId() {
         return recipeId;
