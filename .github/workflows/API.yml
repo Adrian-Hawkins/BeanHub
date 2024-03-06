@@ -30,10 +30,9 @@ jobs:
       
     - name: test
       run: |
-        pwd
         ls
         echo "dfdsf"
-        cd BeanHub.API
+        cd ./Beanhub.API/src/main/resources
         ls
 
 
