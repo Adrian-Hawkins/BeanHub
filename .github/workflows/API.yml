@@ -19,14 +19,19 @@ jobs:
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 
 
     # This is wack AF, WTF
-    - name: Inject application.yml
+    # - name: Inject application.yml
+    #   run: |
+    #     echo "spring:" > ./Beanhub.API/src/main/resources/application.yml
+    #     echo "  datasource:" >> ./Beanhub.API/src/main/resources/application.yml
+    #     echo "    url: ${{ secrets.DB_BUILD_URL }}" >> ./Beanhub.API/src/main/resources/application.yml
+    #     echo "    username: ${{ secrets.DB_BUILD_USERNAME }}" >> ./Beanhub.API/src/main/resources/application.yml
+    #     echo "    password: ${{ secrets.DB_BUILD_PASSWORD }}" >> /./Beanhub.API/src/main/resourcesapplication.yml
+    #     echo "    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver" >> ./Beanhub.API/src/main/resources/application.yml
+      
+    - name: test
       run: |
-        echo "spring:" > ./Beanhub.API/src/main/resources/application.yml
-        echo "  datasource:" >> ./Beanhub.API/src/main/resources/application.yml
-        echo "    url: ${{ secrets.DB_BUILD_URL }}" >> ./Beanhub.API/src/main/resources/application.yml
-        echo "    username: ${{ secrets.DB_BUILD_USERNAME }}" >> ./Beanhub.API/src/main/resources/application.yml
-        echo "    password: ${{ secrets.DB_BUILD_PASSWORD }}" >> /./Beanhub.API/src/main/resourcesapplication.yml
-        echo "    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver" >> ./Beanhub.API/src/main/resources/application.yml
+        pwd
+        ls
 
 
     - name: Build with Gradle Wrapper
