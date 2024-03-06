@@ -1,5 +1,6 @@
 package com.bean.api.controllers;
 
+import com.bean.api.services.TestService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String helloWorld() {
+        TestService t = new TestService();
+        t.someMethodToCreateUser();
         return "Hello, fdsdfsd!";
     }
 

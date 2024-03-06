@@ -1,6 +1,0 @@
-# spring:
-#   datasource:
-#     url: jdbc:sqlserver://localhost;databaseName=yourDbName
-#     username: ${DB_USERNAME}
-#     password: ${DB_PASSWORD}
-#     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
