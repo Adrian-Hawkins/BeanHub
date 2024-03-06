@@ -19,7 +19,6 @@ public class App {
     private static Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
     public static void main(String[] args) {
-        System.out.println("Base URL: " + BASE_URL);
         try {
             Authentication.GetCode();
         } catch (IOException e) {
