@@ -32,8 +32,8 @@ jobs:
       run: |
         ls
         echo "dfdsf"
-        cd ./Beanhub.API/src/main/resources
-        ls
+        cd ./Beanhub.API/src/main
+        ls -d */
 
 
     - name: Build with Gradle Wrapper
