@@ -35,14 +35,8 @@ jobs:
       run: |
         cd BeanHub.API
         ./gradlew
-        ./gradlew build
+        ./gradlew build -x test
     
-    - name: Test with Gradle Wrapper
-      run: |
-        cd BeanHub.API
-        ./gradlew
-        ./gradlew test
-
     - name: Test with Gradle Wrapper
       run: |
         cd BeanHub.API
