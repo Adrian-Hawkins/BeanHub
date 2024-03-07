@@ -36,5 +36,6 @@ override.tf.json
 terraform.rc
 
 
+application.yml
 .env
 *.log

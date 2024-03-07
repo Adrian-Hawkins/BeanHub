@@ -8,8 +8,6 @@ on:
 jobs:
   build_api:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -19,6 +17,19 @@ jobs:
         distribution: 'temurin'
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 
+
+    # This is wack AF, WTF
+    - name: Inject application.yml
+      run: |
+        cd ./BeanHub.API
+        mkdir -p ./src/main/resources
+        cd ./src/main/resources
+        echo "spring:" > ./application.yml
+        echo "  datasource:" >> ./application.yml
+        echo "    url: ${{ secrets.DB_BUILD_URL }}" >> ./application.yml
+        echo "    username: ${{ secrets.DB_BUILD_USERNAME }}" >> ./application.yml
+        echo "    password: ${{ secrets.DB_BUILD_PASSWORD }}" >> ./application.yml
+        echo "    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver" >> ./application.yml
 
     - name: Build with Gradle Wrapper
       run: |
