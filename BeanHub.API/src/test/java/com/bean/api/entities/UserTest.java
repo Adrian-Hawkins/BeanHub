@@ -1,4 +1,4 @@
-package com.bean.api.entitities;
+package com.bean.api.entities;
 
 import com.bean.api.entities.User;
 import org.junit.jupiter.api.BeforeEach;
