@@ -40,7 +40,7 @@ CREATE TABLE [Unit] (
 )
 GO
 
-CREATE TABLE [RecipeIngredients] (
+CREATE TABLE [recipe_ingredients] (
   [RecipeIngredients_ID] integer IDENTITY(1,1) NOT NULL PRIMARY KEY,
   [Ingredient_ID] integer NOT NULL,
   [Recipe_ID] integer NOT NULL,
@@ -58,11 +58,11 @@ GO
 ALTER TABLE [Rating] ADD FOREIGN KEY ([Recipe_ID]) REFERENCES [Recipe] ([Recipe_ID])
 GO
 
-ALTER TABLE [RecipeIngredients] ADD FOREIGN KEY ([Ingredient_ID]) REFERENCES [Ingredient] ([Ingredient_ID])
+ALTER TABLE [recipe_ingredients] ADD FOREIGN KEY ([Ingredient_ID]) REFERENCES [Ingredient] ([Ingredient_ID])
 GO
 
-ALTER TABLE [RecipeIngredients] ADD FOREIGN KEY ([Recipe_ID]) REFERENCES [Recipe] ([Recipe_ID])
+ALTER TABLE [recipe_ingredients] ADD FOREIGN KEY ([Recipe_ID]) REFERENCES [Recipe] ([Recipe_ID])
 GO
 
-ALTER TABLE [RecipeIngredients] ADD FOREIGN KEY ([Unit_ID]) REFERENCES [Unit] ([Unit_ID])
+ALTER TABLE [recipe_ingredients] ADD FOREIGN KEY ([Unit_ID]) REFERENCES [Unit] ([Unit_ID])
 GO
