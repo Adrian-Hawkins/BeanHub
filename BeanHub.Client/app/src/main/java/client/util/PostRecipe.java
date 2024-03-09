@@ -1,5 +1,12 @@
 package client.util;
 
+import client.helpers.JSONParser;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 public class PostRecipe {
@@ -7,10 +14,24 @@ public class PostRecipe {
     private final Scanner scanner;
     private String username;
     private final String BASE_URL = System.getenv("BEANHUB_API_URL");
-
+    private final static JSONParser jsonParser = new JSONParser();
     public PostRecipe(String username) {
         this.username = username;
         this.scanner = new Scanner(System.in);
+    }
+
+    public void post() throws IOException, InterruptedException {
+        Map<String, Object> requestBody = construct();
+        String url = BASE_URL + "/postRecipe";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(String.valueOf(requestBody)))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(jsonParser.getItem(response.body(), "status"));
     }
 
     public Map<String, Object> construct() {
