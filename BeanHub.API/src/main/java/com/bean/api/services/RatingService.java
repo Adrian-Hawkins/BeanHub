@@ -35,10 +35,17 @@ public class RatingService {
     }
 
     @Transactional(readOnly = true)
+    public List<Integer> getRecipeIdsByUserId(int userId) {
+        String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
+        TypedQuery<Integer> query = entityManager.createQuery(jpql, Integer.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
+
+    @Transactional(readOnly = true)
     public List<Rating> getAllRatings() {
         String jpql = "SELECT r FROM Rating r";
         TypedQuery<Rating> query = entityManager.createQuery(jpql, Rating.class);
         return query.getResultList();
     }
 }
-
