@@ -3,6 +3,7 @@ package com.bean.api.controllers;
 import java.util.List;
 
 import com.bean.api.entities.Rating;
+import com.bean.api.entities.Recipe;
 import com.bean.api.entities.RecipeIngredients;
 import com.bean.api.entities.User;
 import com.bean.api.services.RatingService;
@@ -24,10 +25,9 @@ public class FeedController {
     private UserService userService;
 
     @GetMapping("/feed")
-    public List<Integer> getAllRecipeIngredients() {
-        int u = userService.getUserByUsername("test").getUserId();
-        List<Integer> recipeIds = ratingService.getRecipeIdsByUserId(u);
-        return recipeIds;
-        // return u;
+    public List<Recipe> getAllRecipeIngredients() {
+        int u = userService.getUserByUsername("test-user").getUserId();
+        List<Recipe> recipes = ratingService.getRatedRecipesByUserId(u);
+        return recipes;
     }
 }
