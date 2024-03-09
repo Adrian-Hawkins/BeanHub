@@ -28,6 +28,7 @@ jobs:
       run: |
         cd BeanHub.Client
         ./gradlew build
+        cd ../
         mv Beanhub.Client/app/build/libs/*.jar BeanhubClientExecutable/clientExec.jar
 
     - name: Upload JAR
