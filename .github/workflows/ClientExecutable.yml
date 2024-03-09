@@ -1,0 +1,31 @@
+name: Build and Upload Client Artifact
+
+on:
+  push:
+    branches:
+      - KAN-20-ExecutableClient # Change this to DEV!!!!!
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Build JAR
+      run: |
+        ./gradlew clean bootJar
+        mv Beanhub.Client/build/libs/*.jar BeanhubClientExecutable/clientExec.jar
+
+    - name: Upload JAR
+      uses: actions/upload-artifact@v2
+      with:
+        name: client-jar
+        path: BeanhubClientExecutable/clientExec.jar
