@@ -21,7 +21,9 @@ public class App {
 
    private static final PostRecipe postRecipe = new PostRecipe("Adrian");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        // System.out.println(BASE_URL);
+        // System.out.println(Authentication.GetCode());
        System.out.println(postRecipe.construct());
 //        System.out.println();
 //        try {
