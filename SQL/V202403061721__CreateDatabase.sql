@@ -29,7 +29,8 @@ GO
 
 CREATE TABLE [Ingredient] (
   [Ingredient_ID] integer IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  [Ingredient_Name] varchar(50) NULL
+  [Ingredient_Name] varchar(50) NULL,
+  [Ingredient_Short_Description] varchar(255) NULL
 )
 GO
 
