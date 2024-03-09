@@ -4,6 +4,7 @@
 package client;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 import client.util.PostRecipe;
 import org.apache.http.HttpEntity;
@@ -17,22 +18,56 @@ import client.util.Auth;
 public class App {
 
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
-    private static Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
+    private static final Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
-   private static final PostRecipe postRecipe = new PostRecipe("Adrian");
+    private static final PostRecipe postRecipe = new PostRecipe("Adrian");
+
+    private static boolean hasLoggedIn=false;
 
     public static void main(String[] args) {
-       System.out.println(postRecipe.construct());
-//        System.out.println();
-//        try {
-//            Authentication.GetCode();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+        Scanner scanner = new Scanner(System.in);
+        String[] currentOptions = {};
 
+        // Log in here
+
+
+        String[] userOptions = {"View your feed", "View your recipes", "View explore page", "Post a new recipe", "Exit"};
+        while (true) {
+            System.out.println("Select what you want to do:");
+            for (int i =0;i<userOptions.length;i++){
+                System.out.println((i+1) + ": " + userOptions[i]);
+            }
+            String temp = scanner.nextLine();
+            int userOption = 0;
+            try {
+                userOption = Integer.parseInt(temp);
+                if (userOption>userOptions.length){
+                    Integer.parseInt("q");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Select a valid option!!!");
+                continue;
+            }
+
+            switch (userOption) {
+                case 1:
+                    // View personalised feed
+                    break;
+                case 2:
+                    // View my recipes
+                    break;
+                case 3:
+                    // View my explore
+                    break;
+                case 4:
+                    // Post a new recipe
+                    postRecipe.construct();
+                    break;
+                default:
+                    // Log out and then kill the program
+                    System.exit(0);
+                    break;
+            }
+        }
     }
-
-
 }
