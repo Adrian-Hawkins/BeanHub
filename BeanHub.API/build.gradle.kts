@@ -20,7 +20,7 @@ dependencies {
 	// implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	// runtimeOnly("com.microsoft.sqlserver:mssql-jdbc")
+	runtimeOnly("com.microsoft.sqlserver:mssql-jdbc")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
