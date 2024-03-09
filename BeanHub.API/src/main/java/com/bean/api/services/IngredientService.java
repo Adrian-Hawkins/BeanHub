@@ -35,6 +35,15 @@ public class IngredientService {
     }
 
     @Transactional(readOnly = true)
+    public Ingredient getIngredientByName(String ingredientName) {
+        String jpql = "SELECT u FROM Ingredient u WHERE LOWER(u.ingredientName) = LOWER(:ingredientName)";
+        TypedQuery<Ingredient> query = entityManager.createQuery(jpql, Ingredient.class);
+        query.setParameter("ingredientName", ingredientName);
+        List<Ingredient> resultList = query.getResultList();
+        return resultList.isEmpty() ? null : resultList.getFirst();
+    }
+
+    @Transactional(readOnly = true)
     public List<Ingredient> getAllIngredients() {
         String jpql = "SELECT i FROM Ingredient i";
         TypedQuery<Ingredient> query = entityManager.createQuery(jpql, Ingredient.class);

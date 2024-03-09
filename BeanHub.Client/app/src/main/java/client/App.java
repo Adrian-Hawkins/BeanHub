@@ -5,6 +5,7 @@ package client;
 
 import java.io.IOException;
 
+import client.util.PostRecipe;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,14 +19,18 @@ public class App {
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
     private static Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
+   private static final PostRecipe postRecipe = new PostRecipe("Adrian");
+
     public static void main(String[] args) {
-        try {
-            Authentication.GetCode();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+       System.out.println(postRecipe.construct());
+//        System.out.println();
+//        try {
+//            Authentication.GetCode();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
     }
 
