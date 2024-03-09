@@ -27,6 +27,7 @@ jobs:
     - name: Build JAR
       run: |
         cd BeanHub.Client
+        mkdir -p ./app/build/libs
         ./gradlew build
         cd ../
         mv Beanhub.Client/app/build/libs/*.jar BeanhubClientExecutable.jar
