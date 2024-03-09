@@ -16,6 +16,10 @@ public class Auth {
     public String GetCode() throws IOException, InterruptedException {
         String url = "https://github.com/login/device/code";
         String requestBody = "{\"client_id\": \"" + ClientId + "\", \"scope\": \"user\"}";
+        if(ClientId == null) {
+            System.out.println("Client ID is not set. Please set the Client ID to continue.");
+            return null;
+        }
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
