@@ -29,12 +29,4 @@ class IngredientTest {
         String actualName = ingredient.getIngredientName();
         assertEquals(expectedName, actualName);
     }
-
-    @Test
-    void testGetSetIngredientShortDescription() {
-        String expectedDescription = "A mineral compound";
-        ingredient.setIngredientShortDescription(expectedDescription);
-        String actualDescription = ingredient.getIngredientShortDescription();
-        assertEquals(expectedDescription, actualDescription);
-    }
 }

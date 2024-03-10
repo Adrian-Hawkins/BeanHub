@@ -22,7 +22,7 @@ public class App {
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
     private static final Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
-    private static final PostRecipe postRecipe = new PostRecipe("Adrian");
+    private static final PostRecipe postRecipe = new PostRecipe();
 
     private static boolean hasLoggedIn=false;
 
@@ -95,7 +95,8 @@ public class App {
                     break;
                 case 4:
                     // Post a new recipe
-                    System.out.println(postRecipe.construct());
+                    // System.out.println(postRecipe.post());
+                    postRecipe.post(Authentication.getUsername());
                     break;
                 default:
                     // Log out and then kill the program
