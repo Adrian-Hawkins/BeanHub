@@ -13,16 +13,14 @@ import java.util.*;
 public class PostRecipe {
 
     private final Scanner scanner;
-    private String username;
     private final String BASE_URL = System.getenv("BEANHUB_API_URL");
     private final static JSONParser jsonParser = new JSONParser();
-    public PostRecipe(String username) {
-        this.username = username;
+    public PostRecipe() {
         this.scanner = new Scanner(System.in);
     }
 
-    public void post() throws IOException, InterruptedException {
-        Map<String, Object> requestBody = construct();
+    public void post(String username) throws IOException, InterruptedException {
+        Map<String, Object> requestBody = construct(username);
         String url = BASE_URL + "/postRecipe";
         Gson gson = new Gson();
         String jsonBody = gson.toJson(requestBody);
@@ -37,15 +35,15 @@ public class PostRecipe {
         System.out.println(jsonParser.getItem(response.body(), "status"));
     }
 
-    public Map<String, Object> construct() {
+    public Map<String, Object> construct(String username) {
         Map<String, Object> recipe = new HashMap<String, Object>();
-        recipe.put("user", getUser());
+        recipe.put("user", getUser(username));
         recipe.put("recipe", inputRecipe());
         recipe.put("recipeIngredients", constructRecipeIngredients());
         return recipe;
     }
 
-    public Map<String, Object> getUser() {
+    public Map<String, Object> getUser(String username) {
         Map<String, Object> user = new HashMap<String, Object>();
         user.put("username", username);
         return user;
