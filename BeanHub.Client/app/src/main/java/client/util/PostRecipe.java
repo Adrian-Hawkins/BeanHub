@@ -1,6 +1,7 @@
 package client.util;
 
 import client.helpers.JSONParser;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,12 +24,14 @@ public class PostRecipe {
     public void post() throws IOException, InterruptedException {
         Map<String, Object> requestBody = construct();
         String url = BASE_URL + "/postRecipe";
+        Gson gson = new Gson();
+        String jsonBody = gson.toJson(requestBody);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(String.valueOf(requestBody)))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(jsonParser.getItem(response.body(), "status"));
