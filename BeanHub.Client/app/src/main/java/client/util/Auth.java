@@ -28,13 +28,16 @@ public class Auth {
             if(this.username == null)
                 return false;
             body.put("username", this.username);
+
+            Gson gson = new Gson();
+            String jsonBody = gson.toJson(body);
             String url = BASE_URL + "/auth/login";
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(String.valueOf(body)))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody)) 
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return true;
