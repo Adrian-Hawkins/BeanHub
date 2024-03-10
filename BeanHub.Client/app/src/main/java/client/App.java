@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import client.util.PostRecipe;
+import client.util.ViewPastRecipes;
 import client.util.Colors;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,7 +28,7 @@ public class App {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
         // Log in here
@@ -91,13 +92,14 @@ public class App {
                     break;
                 case 2:
                     // View my recipes
+                    ViewPastRecipes oldRecipeView = new ViewPastRecipes("test-user");
                     break;
                 case 3:
                     // View my explore page
                     break;
                 case 4:
                     // Post a new recipe
-                    postRecipe.construct();
+                    System.out.println(postRecipe.construct());
                     break;
                 default:
                     // Log out and then kill the program
