@@ -20,13 +20,13 @@ public class ViewPastRecipes {
     private final int pageSize = 5;
     private int pageNumber = 1;
     private final int maxNumPages;
-    private final String mainURL = "http://localhost:8080/api/viewpastrecipes/";
+    private final String mainURL = System.getenv("BEANHUB_API_URL");
     private Recipe[] userRecipes;
     private final Scanner scanner;
 
     public ViewPastRecipes(String userName) throws IOException, InterruptedException{
         scanner = new Scanner(System.in);
-        String url = mainURL + "getUserRecipes?username="+userName;
+        String url = mainURL + "/api/viewpastrecipes/getUserRecipes?username="+userName;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -104,6 +104,36 @@ public class ViewPastRecipes {
             if (userOption<=(highNumber-lowNumber)){
                 //View that recipe
                 System.out.println(userRecipes[userOption-1]);
+                Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
+                String[] currOptions = {"Edit recipe", "Delete recipe", "Back to home"};
+                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.WHITE_BRIGHT};
+                
+                for (int i=0;i<currOptions.length;i++){
+                    Colors.printColor(currColors[i], (i+1) + ": " + currOptions[i]);
+                }
+
+                temp = scanner.nextLine();
+                int viewRecipeOption = 0;
+
+                try {
+                    viewRecipeOption = Integer.parseInt(temp);
+                    if (viewRecipeOption>highNumber + currOptions.length || viewRecipeOption<0){
+                        Integer.parseInt("q");
+                    }
+                } catch (NumberFormatException e) {
+                    Colors.printColor(Colors.RED, "Invalid input provided, returning home.");
+                    return;
+                }
+
+                switch (viewRecipeOption) {
+                    case 1:
+                        //Edit the recipe here
+                        break;
+                    case 2:
+                        // Delete the recipe if no ratings are there
+                    default:
+                        return; // returns to the main page.
+                }
             } else {
                 if (userOption==highNumber+1){
                     if (pageNumber==1){
