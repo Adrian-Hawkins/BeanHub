@@ -1,6 +1,7 @@
 package com.bean.api.services;
 
 import com.bean.api.entities.Rating;
+import com.bean.api.entities.Recipe;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,10 +36,22 @@ public class RatingService {
     }
 
     @Transactional(readOnly = true)
+    public List<Recipe> getRatedRecipesByUserId(int userId) {
+        String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
+        TypedQuery<Integer> query = entityManager.createQuery(jpql, Integer.class);
+        query.setParameter("userId", userId);
+        List<Integer> recipeIds  = query.getResultList();
+
+        String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
+        TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
+        recipeQuery.setParameter("recipeIds", recipeIds);
+        return recipeQuery.getResultList();
+    }
+
+    @Transactional(readOnly = true)
     public List<Rating> getAllRatings() {
         String jpql = "SELECT r FROM Rating r";
         TypedQuery<Rating> query = entityManager.createQuery(jpql, Rating.class);
         return query.getResultList();
     }
 }
-
