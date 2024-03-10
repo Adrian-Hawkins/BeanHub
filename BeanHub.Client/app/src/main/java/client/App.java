@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import client.util.PostRecipe;
+import client.util.Colors;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -24,14 +25,49 @@ public class App {
 
     private static boolean hasLoggedIn=false;
 
+
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String[] currentOptions = {};
 
         // Log in here
+        String[] userOptions = {"Sign up", "Log in", "Exit"};
+        boolean hasLoggedIn = false;
+        while (!hasLoggedIn) {
+            System.out.println("Select what you want to do:");
+            for (int i =0;i<userOptions.length;i++){
+                System.out.println((i+1) + ": " + userOptions[i]);
+            }
+            String temp = scanner.nextLine();
+            int userOption = 0;
+            try {
+                userOption = Integer.parseInt(temp);
+                if (userOption>userOptions.length){
+                    Integer.parseInt("q");
+                }
+            } catch (NumberFormatException e) {
+                Colors.printColor(Colors.RED, "Select a valid option!!!");
+                continue;
+            }
 
+            switch (userOption) {
+                case 1:
+                    //Sign up
+                    // Make them log in
+                    hasLoggedIn = true;
+                    break;
+                case 2:
+                    //Log in
+                    hasLoggedIn = true;
+                    break;
+                default:
+                    scanner.close();
+                    System.exit(0);
+                    break;
+            }
+        }
 
-        String[] userOptions = {"View your feed", "View your recipes", "View explore page", "Post a new recipe", "Exit"};
+        userOptions = new String[] {"View your feed", "View your recipes", "View explore page", "Post a new recipe", "Exit"};
         while (true) {
             System.out.println("Select what you want to do:");
             for (int i =0;i<userOptions.length;i++){
@@ -45,7 +81,7 @@ public class App {
                     Integer.parseInt("q");
                 }
             } catch (NumberFormatException e) {
-                System.err.println("Select a valid option!!!");
+                Colors.printColor(Colors.RED, "Select a valid option!!!");
                 continue;
             }
 
@@ -57,7 +93,7 @@ public class App {
                     // View my recipes
                     break;
                 case 3:
-                    // View my explore
+                    // View my explore page
                     break;
                 case 4:
                     // Post a new recipe
@@ -65,6 +101,7 @@ public class App {
                     break;
                 default:
                     // Log out and then kill the program
+                    scanner.close();
                     System.exit(0);
                     break;
             }
