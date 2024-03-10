@@ -55,7 +55,7 @@ public class App {
                 case 1:
                     //Log in
                     hasLoggedIn = Authentication.loginFlow();
-                    System.out.println("Logged in" + hasLoggedIn);
+                    System.out.println("Logged in: " + hasLoggedIn);
                     break;
                 default:
                     scanner.close();

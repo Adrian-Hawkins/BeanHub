@@ -33,6 +33,7 @@ public class Auth {
             String jsonBody = gson.toJson(body);
             String url = BASE_URL + "/auth/login";
             HttpClient client = HttpClient.newHttpClient();
+            System.out.println("URL = " + url);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")

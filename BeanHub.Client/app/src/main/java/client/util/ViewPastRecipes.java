@@ -33,15 +33,11 @@ public class ViewPastRecipes {
         Gson gson = new Gson();
         JsonArray jsonarr = gson.fromJson(response.body(), JsonArray.class);
 
-        int uID = jsonarr.get(0)
-        .getAsJsonObject().get("user")
-        .getAsJsonObject().get("userId").getAsInt();
-        this.userID = uID;
-
         int numUserRecipes = jsonarr.size(); // SQL is: SELECT COUNT Recipe_ID from Recipe WHERE User_ID = userID
         if (numUserRecipes <= 0){
             Colors.printColor(Colors.RED_BOLD, "UPLOAD A RECIPE FIRST");
             this.maxNumPages = 0;
+            this.userID = -1;
             return;
         } else {
             int temp = 0;
@@ -52,6 +48,11 @@ public class ViewPastRecipes {
             }
             this.maxNumPages = temp;
         }
+
+        int uID = jsonarr.get(0)
+        .getAsJsonObject().get("user")
+        .getAsJsonObject().get("userId").getAsInt();
+        this.userID = uID;
 
         userRecipes = new Recipe[numUserRecipes];
         for (int i=0;i<numUserRecipes;i++) {
@@ -65,6 +66,9 @@ public class ViewPastRecipes {
     }
 
     public void UserInteraction(){
+        if (this.userID==-1){
+            return;
+        }
         while (true){
             Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select what you want to do.");
             String[] userOptions = {"Previous page", "Next page", "Back to home"};
