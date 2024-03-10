@@ -93,6 +93,7 @@ public class App {
                 case 2:
                     // View my recipes
                     ViewPastRecipes oldRecipeView = new ViewPastRecipes("test-user");
+                    oldRecipeView.UserInteraction();
                     break;
                 case 3:
                     // View my explore page
