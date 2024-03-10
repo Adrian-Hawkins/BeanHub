@@ -7,11 +7,44 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Auth {
     private String ClientId;
+
+    private static final String BASE_URL = System.getenv("BEANHUB_API_URL");;
+
+    private String username;
+
     public Auth(String ClientId) {
         this.ClientId = ClientId;
+    }
+
+    public Boolean loginFlow() {
+        try {
+            this.username = GetCode();
+            Map<String, String> body = new HashMap<String, String>();
+            if(this.username == null)
+                return false;
+            body.put("username", this.username);
+
+            Gson gson = new Gson();
+            String jsonBody = gson.toJson(body);
+            String url = BASE_URL + "/auth/login";
+            HttpClient client = HttpClient.newHttpClient();
+            System.out.println("URL = " + url);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody)) 
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return true;
+        } catch (IOException | InterruptedException e) {
+            return false;
+        }
     }
     public String GetCode() throws IOException, InterruptedException {
         String url = "https://github.com/login/device/code";
@@ -81,6 +114,10 @@ public class Auth {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
         return jsonObject.get("login").getAsString();       
+    }
+
+    public String getUsername() {
+        return username;
     }
 
 }

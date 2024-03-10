@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import client.util.PostRecipe;
+import client.util.ViewPastRecipes;
 import client.util.Colors;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,11 +28,11 @@ public class App {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
         // Log in here
-        String[] userOptions = {"Sign up", "Log in", "Exit"};
+        String[] userOptions = {"Log in", "Exit"};
         boolean hasLoggedIn = false;
         while (!hasLoggedIn) {
             System.out.println("Select what you want to do:");
@@ -52,13 +53,9 @@ public class App {
 
             switch (userOption) {
                 case 1:
-                    //Sign up
-                    // Make them log in
-                    hasLoggedIn = true;
-                    break;
-                case 2:
                     //Log in
-                    hasLoggedIn = true;
+                    hasLoggedIn = Authentication.loginFlow();
+                    System.out.println("Logged in: " + hasLoggedIn);
                     break;
                 default:
                     scanner.close();
@@ -91,13 +88,15 @@ public class App {
                     break;
                 case 2:
                     // View my recipes
+                    ViewPastRecipes oldRecipeView = new ViewPastRecipes(Authentication.getUsername()); // Make sure this changes after auth is sorted.
+                    oldRecipeView.UserInteraction();
                     break;
                 case 3:
                     // View my explore page
                     break;
                 case 4:
                     // Post a new recipe
-                    postRecipe.construct();
+                    System.out.println(postRecipe.construct());
                     break;
                 default:
                     // Log out and then kill the program
