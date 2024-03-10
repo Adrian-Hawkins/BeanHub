@@ -92,7 +92,7 @@ public class App {
                     break;
                 case 2:
                     // View my recipes
-                    ViewPastRecipes oldRecipeView = new ViewPastRecipes("test-user");
+                    ViewPastRecipes oldRecipeView = new ViewPastRecipes("test-user"); // Make sure this changes after auth is sorted.
                     oldRecipeView.UserInteraction();
                     break;
                 case 3:

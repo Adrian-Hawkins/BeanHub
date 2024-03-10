@@ -26,7 +26,7 @@ public class ViewPastRecipes {
 
     public ViewPastRecipes(String userName) throws IOException, InterruptedException{
         scanner = new Scanner(System.in);
-        String url = mainURL + "getUserRecipes";
+        String url = mainURL + "getUserRecipes?username="+userName;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
