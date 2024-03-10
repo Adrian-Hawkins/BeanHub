@@ -35,7 +35,6 @@ class IngredientServiceTest {
     void saveIngredient() {
         Ingredient ingredient = new Ingredient();
         ingredient.setIngredientName("Salt");
-        ingredient.setIngredientShortDescription("Mineral compound");
 
         ingredientService.saveIngredient(ingredient);
 
@@ -47,7 +46,6 @@ class IngredientServiceTest {
         Ingredient ingredient = new Ingredient();
         ingredient.setIngredientId(1);
         ingredient.setIngredientName("Sugar");
-        ingredient.setIngredientShortDescription("Sweet carbohydrate");
 
         ingredientService.updateIngredient(ingredient);
 
@@ -59,7 +57,6 @@ class IngredientServiceTest {
         Ingredient ingredient = new Ingredient();
         ingredient.setIngredientId(1);
         ingredient.setIngredientName("Flour");
-        ingredient.setIngredientShortDescription("Powder from grains");
 
         when(entityManager.contains(ingredient)).thenReturn(true);
 
@@ -74,7 +71,6 @@ class IngredientServiceTest {
         Ingredient ingredient = new Ingredient();
         ingredient.setIngredientId(ingredientId);
         ingredient.setIngredientName("Pepper");
-        ingredient.setIngredientShortDescription("Spice made from berries");
 
         when(entityManager.find(Ingredient.class, ingredientId)).thenReturn(ingredient);
 
@@ -83,7 +79,6 @@ class IngredientServiceTest {
         assertNotNull(result);
         assertEquals(ingredient.getIngredientId(), result.getIngredientId());
         assertEquals(ingredient.getIngredientName(), result.getIngredientName());
-        assertEquals(ingredient.getIngredientShortDescription(), result.getIngredientShortDescription());
     }
 
     @Test
@@ -91,12 +86,10 @@ class IngredientServiceTest {
         Ingredient ingredient1 = new Ingredient();
         ingredient1.setIngredientId(1);
         ingredient1.setIngredientName("Cinnamon");
-        ingredient1.setIngredientShortDescription("Spice from tree bark");
 
         Ingredient ingredient2 = new Ingredient();
         ingredient2.setIngredientId(2);
         ingredient2.setIngredientName("Vanilla");
-        ingredient2.setIngredientShortDescription("Flavoring from bean pods");
 
         List<Ingredient> ingredients = Arrays.asList(ingredient1, ingredient2);
 

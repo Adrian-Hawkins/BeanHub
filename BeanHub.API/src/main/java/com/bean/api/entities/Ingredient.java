@@ -25,5 +25,5 @@ public class Ingredient {
     public void setIngredientName(String ingredientName) {
         this.ingredientName = ingredientName;
     }
-    
+
 }
