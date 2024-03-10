@@ -12,7 +12,7 @@ cd api
 ```cmd
 cd BeanHub.Client
 ./gradlew
-./gradlew --console=palin app:run   
+./gradlew --console=plain app:run   
 ```
 
 ## auth.tfvars
