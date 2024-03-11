@@ -15,8 +15,13 @@ cd BeanHub.Client
 ./gradlew --console=plain app:run   
 ```
 
-If you get a complaint about a client id, do this:
-
+If you get a complaint about a client ID, you must set the client ID. You may also need to set the API url.
+To make this a bit easier, add a `setenv.ps1` file in the `BeanHub.Client` directory, with this content:
+```
+$env:BEANHUB_CLIENT_ID = "<yourCLientID>"
+$env:BEANHUB_API_URL = "<API URL>"
+```
+This info is likely confidential, **SO DO NOT COMMIT IT!!!**
 
 ## auth.tfvars
 ```hcl

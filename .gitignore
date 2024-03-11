@@ -40,3 +40,4 @@ application.yml
 .env
 *.log
 *.class
+BeanHub.Client/setenv.ps1
