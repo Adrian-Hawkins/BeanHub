@@ -50,6 +50,5 @@ tasks.named<Test>("test") {
 
 tasks.named("run", JavaExec::class) {
     standardInput = System.`in`
-    standardOutput = System.out
 }
 
