@@ -10,6 +10,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "[Recipe]")
@@ -23,6 +25,7 @@ public class Recipe {
     private Integer prepTime;
     private Integer cookingTime;
     private String recipeSteps;
+    private LocalDateTime dateAdded;
 
     @ManyToOne
     @JoinColumn(name = "User_ID", nullable = false)
@@ -85,5 +88,14 @@ public class Recipe {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded() {
+        LocalDateTime date = LocalDateTime.now();
+        this.dateAdded = date;
     }
 }
