@@ -15,6 +15,9 @@ cd BeanHub.Client
 ./gradlew --console=plain app:run   
 ```
 
+If you get a complaint about a client id, do this:
+
+
 ## auth.tfvars
 ```hcl
 access_key = "YOUR_ACCESS_KEY_HERE"

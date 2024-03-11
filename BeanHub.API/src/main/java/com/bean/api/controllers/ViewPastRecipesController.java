@@ -3,6 +3,7 @@ package com.bean.api.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,5 +27,17 @@ public class ViewPastRecipesController {
         int userId = userService.getUserByUsername(username).getUserId();
         List<Recipe> recipes = pastRecipeService.getUserRecipes(userId);
         return recipes;
+    }
+
+    @DeleteMapping("/deleteRecipe")
+    public boolean DeleteRecipe(@RequestParam("recipeID") int recipeID){
+        Long numRatings = pastRecipeService.getNumRecipeRatings(recipeID);
+        if (numRatings > 0){
+            return false;
+        } else {
+            // Delete the recipe
+            pastRecipeService.deleteRecipe(recipeID);
+            return true;
+        }
     }
 }

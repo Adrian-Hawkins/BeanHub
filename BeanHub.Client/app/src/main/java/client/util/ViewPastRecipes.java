@@ -27,6 +27,7 @@ public class ViewPastRecipes {
     public ViewPastRecipes(String userName) throws IOException, InterruptedException{
         scanner = new Scanner(System.in);
         String url = mainURL + "/api/viewpastrecipes/getUserRecipes?username="+userName;
+        
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -57,7 +58,9 @@ public class ViewPastRecipes {
         userRecipes = new Recipe[numUserRecipes];
         for (int i=0;i<numUserRecipes;i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
-            userRecipes[i] = new Recipe(currJsonObject.get("recipeName").getAsString(),
+            userRecipes[i] = new Recipe(
+            currJsonObject.get("recipeId").getAsInt(),
+            currJsonObject.get("recipeName").getAsString(),
             currJsonObject.get("recipeShortDescription").getAsString(),
             currJsonObject.get("prepTime").getAsInt(),
             currJsonObject.get("cookingTime").getAsInt(),
@@ -65,7 +68,7 @@ public class ViewPastRecipes {
         }
     }
 
-    public void UserInteraction(){
+    public void UserInteraction() throws IOException, InterruptedException{
         if (this.userID==-1){
             return;
         }
@@ -131,6 +134,12 @@ public class ViewPastRecipes {
                         break;
                     case 2:
                         // Delete the recipe if no ratings are there
+                        boolean recipeDeleted = deleteRecipe(userRecipes[userOption-1]);
+                        if (recipeDeleted){
+                            Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe deleted successfully!");
+                        } else {
+                            Colors.printColor(Colors.RED_BACKGROUND_BRIGHT, "Recipe cannot be deleted!!!");
+                        }
                     default:
                         return; // returns to the main page.
                 }
@@ -152,5 +161,16 @@ public class ViewPastRecipes {
                 }
             }
         }
+    }
+
+    private boolean deleteRecipe(Recipe recipeToDelete) throws IOException, InterruptedException{
+        String url = mainURL + "/api/viewpastrecipes/deleteRecipe?recipeID="+recipeToDelete.getRecipeID();
+        
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).DELETE().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Gson gson = new Gson();
+        var ans = gson.fromJson(response.body(), Boolean.class);
+        return ans;
     }
 }

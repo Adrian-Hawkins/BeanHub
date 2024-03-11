@@ -1,6 +1,13 @@
 package client.util;
 
 public class Recipe{
+    private int recipeID;
+
+    public int getRecipeID() {
+        return recipeID;
+    }
+
+
     private String recipeName;
     private String recipeShortDescription;
     private Integer prepTime;
@@ -43,8 +50,9 @@ public class Recipe{
     }
 
 
-    public Recipe(String recipeName, String recipeShortDescription, Integer prepTime, Integer cookingTime,
+    public Recipe(int recipeID, String recipeName, String recipeShortDescription, Integer prepTime, Integer cookingTime,
             String recipeSteps) {
+        this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.recipeShortDescription = recipeShortDescription;
         this.prepTime = prepTime;
