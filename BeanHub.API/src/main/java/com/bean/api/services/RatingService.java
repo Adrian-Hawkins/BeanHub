@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -108,11 +109,18 @@ public class RatingService {
                 break;
         }
         System.out.println(recipeIds);
-        String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
-        TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
-        recipeQuery.setParameter("recipeIds", recipeIds);
-        List<Recipe> recipes = recipeQuery.getResultList();
-        return recipes;
+        // Fetch all recipes from the database
+        List<Recipe> allRecipes = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class).getResultList();
+        Map<Integer, Recipe> recipeMap = allRecipes.stream()
+                .collect(Collectors.toMap(Recipe::getRecipeId, Function.identity()));
+        List<Recipe> sortedRecipes = new ArrayList<>();
+        for (Integer recipeId : recipeIds) {
+            Recipe recipe = recipeMap.get(recipeId);
+            if (recipe != null) {
+                sortedRecipes.add(recipe);
+            }
+        }
+        return sortedRecipes;
     }
 
     @Transactional(readOnly = true)
