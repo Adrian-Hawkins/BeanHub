@@ -8,6 +8,7 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
 
@@ -23,11 +24,25 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
+    implementation("org.jline:jline:3.25.1")
+    implementation("com.googlecode.lanterna:lanterna:3.1.2")
 }
 
 application {
     // Define the main class for the application.
     mainClass.set("client.App")
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "client.App"
+    }
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = "client.App"
+    }
 }
 
 tasks.named<Test>("test") {
@@ -37,5 +52,6 @@ tasks.named<Test>("test") {
 
 tasks.named("run", JavaExec::class) {
     standardInput = System.`in`
+    standardOutput = System.out
 }
 
