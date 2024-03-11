@@ -89,7 +89,7 @@ class RecipeIngredientsServiceTest {
 
         when(entityManager.find(RecipeIngredients.class, recipeIngredientsId)).thenReturn(recipeIngredient);
 
-        RecipeIngredients result = recipeIngredientsService.getRecipeIngredientById(recipeIngredientsId);
+        RecipeIngredients result = recipeIngredientsService.getRecipeIngredientById(Long.valueOf(recipeIngredientsId));
 
         assertNotNull(result);
         assertEquals(recipeIngredient.getRecipeIngredientsId(), result.getRecipeIngredientsId());
