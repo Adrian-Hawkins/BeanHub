@@ -69,12 +69,19 @@ public class RecipeController {
         }
     }
 
-    // WIP
     @GetMapping("/get/{id}")
-    public ResponseEntity<RecipeIngredients> getRecipeById(@PathVariable("id") Long id) {
-        RecipeIngredients recipeIngredients = recipeIngredientsService.getRecipeIngredientById(id);
-        if(recipeIngredients != null)
-            return new ResponseEntity<>(recipeIngredients, HttpStatus.OK);
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") Long id) {
+        Recipe recipe = recipeService.getRecipeById(id);
+        if(recipe != null)
+            return new ResponseEntity<>(recipe, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+//    WIP
+    @PatchMapping("/update")
+    public Map<Object, Object> updateRecipe(@RequestBody Recipe recipe) {
+        System.out.println(recipe.getRecipeName());
+//        recipeService.updateRecipe(recipe);
+        return null;
     }
 }

@@ -50,7 +50,7 @@ class RecipeIngredientsServiceTest {
     @Test
     void updateRecipeIngredient() {
         RecipeIngredients recipeIngredient = new RecipeIngredients();
-        recipeIngredient.setRecipeIngredientsId(1);
+        recipeIngredient.setRecipeIngredientsId(1L);
         recipeIngredient.setIngredient(new Ingredient());
         recipeIngredient.setRecipe(new Recipe());
         recipeIngredient.setQuantity(3);
@@ -64,7 +64,7 @@ class RecipeIngredientsServiceTest {
     @Test
     void deleteRecipeIngredient() {
         RecipeIngredients recipeIngredient = new RecipeIngredients();
-        recipeIngredient.setRecipeIngredientsId(1);
+        recipeIngredient.setRecipeIngredientsId(1L);
         recipeIngredient.setIngredient(new Ingredient());
         recipeIngredient.setRecipe(new Recipe());
         recipeIngredient.setQuantity(4);
@@ -81,7 +81,7 @@ class RecipeIngredientsServiceTest {
     void getRecipeIngredientById() {
         Integer recipeIngredientsId = 1;
         RecipeIngredients recipeIngredient = new RecipeIngredients();
-        recipeIngredient.setRecipeIngredientsId(recipeIngredientsId);
+        recipeIngredient.setRecipeIngredientsId(Long.valueOf(recipeIngredientsId));
         recipeIngredient.setIngredient(new Ingredient());
         recipeIngredient.setRecipe(new Recipe());
         recipeIngredient.setQuantity(2);
@@ -102,14 +102,14 @@ class RecipeIngredientsServiceTest {
     @Test
     void getAllRecipeIngredients() {
         RecipeIngredients recipeIngredient1 = new RecipeIngredients();
-        recipeIngredient1.setRecipeIngredientsId(1);
+        recipeIngredient1.setRecipeIngredientsId(1L);
         recipeIngredient1.setIngredient(new Ingredient());
         recipeIngredient1.setRecipe(new Recipe());
         recipeIngredient1.setQuantity(2);
         recipeIngredient1.setUnit(new Unit());
 
         RecipeIngredients recipeIngredient2 = new RecipeIngredients();
-        recipeIngredient2.setRecipeIngredientsId(2);
+        recipeIngredient2.setRecipeIngredientsId(2L);
         recipeIngredient2.setIngredient(new Ingredient());
         recipeIngredient2.setRecipe(new Recipe());
         recipeIngredient2.setQuantity(3);
