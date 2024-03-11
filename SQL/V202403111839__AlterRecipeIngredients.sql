@@ -1,2 +1,1 @@
-ALTER TABLE [recipe_ingredients]
-RENAME COLUMN RecipeIngredients_ID = recipe_ingredients_id;
+EXEC sp_rename 'recipe_ingredients.RecipeIngredients_ID', 'recipe_ingredients_id', 'COLUMN';
