@@ -108,7 +108,6 @@ public class RatingService {
             default:
                 break;
         }
-        System.out.println(recipeIds);
         // Fetch all recipes from the database
         List<Recipe> allRecipes = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class).getResultList();
         Map<Integer, Recipe> recipeMap = allRecipes.stream()
