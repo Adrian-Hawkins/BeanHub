@@ -21,7 +21,6 @@ public class App {
 
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
     private static final Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
-
     private static final PostRecipe postRecipe = new PostRecipe();
 
     private static boolean hasLoggedIn=false;
@@ -29,6 +28,24 @@ public class App {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        Colors.printColor(Colors.GREEN, "\r\n" + //
+        " __          __         _                                       _           \r\n" + //
+        " \\ \\        / /        | |                                     | |          \r\n" + //
+        "  \\ \\  /\\  / /    ___  | |   ___    ___    _ __ ___     ___    | |_    ___  \r\n" + //
+        "   \\ \\/  \\/ /    / _ \\ | |  / __|  / _ \\  | '_ ` _ \\   / _ \\   | __|  / _ \\ \r\n" + //
+        "    \\  /\\  /    |  __/ | | | (__  | (_) | | | | | | | |  __/   | |_  | (_) |\r\n" + //
+        "     \\/  \\/      \\___| |_|  \\___|  \\___/  |_| |_| |_|  \\___|    \\__|  \\___/ \r\n" + //
+        "");
+        Colors.printColor(Colors.GREEN, "\r\n" + //
+        "  ____                           _    _           _     \r\n" + //
+        " |  _ \\                         | |  | |         | |    \r\n" + //
+        " | |_) |   ___    __ _   _ __   | |__| |  _   _  | |__  \r\n" + //
+        " |  _ <   / _ \\  / _` | | '_ \\  |  __  | | | | | | '_ \\ \r\n" + //
+        " | |_) | |  __/ | (_| | | | | | | |  | | | |_| | | |_) |\r\n" + //
+        " |____/   \\___|  \\__,_| |_| |_| |_|  |_|  \\__,_| |_.__/ \r\n" + //
+        "                                                        \r\n" + //
+        "                                                        \r\n" + //
+        "");
         Scanner scanner = new Scanner(System.in);
 
         // Log in here
