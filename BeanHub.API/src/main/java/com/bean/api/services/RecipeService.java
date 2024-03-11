@@ -30,7 +30,7 @@ public class RecipeService {
     }
 
     @Transactional(readOnly = false)
-    public Recipe getRecipeById(Integer recipeId) {
+    public Recipe getRecipeById(Long recipeId) {
         return entityManager.find(Recipe.class, recipeId);
     }
 

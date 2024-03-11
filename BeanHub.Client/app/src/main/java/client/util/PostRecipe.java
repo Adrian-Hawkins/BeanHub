@@ -21,7 +21,7 @@ public class PostRecipe {
 
     public void post(String username) throws IOException, InterruptedException {
         Map<String, Object> requestBody = construct(username);
-        String url = BASE_URL + "/postRecipe";
+        String url = BASE_URL + "/recipe/post";
         Gson gson = new Gson();
         String jsonBody = gson.toJson(requestBody);
         HttpClient client = HttpClient.newHttpClient();
