@@ -4,8 +4,11 @@ import com.bean.api.entities.*;
 import com.bean.api.requests.postRecipeRequest;
 import com.bean.api.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,11 +69,12 @@ public class RecipeController {
         }
     }
 
-    @GetMapping("/Tester")
-    public Map<Object, Object> test() {
-        Map<Object, Object> response = new HashMap<Object, Object>();
-
-        response.put("recipeIngredients", recipeIngredientsService.getAllRecipeIngredients());
-        return  response;
+    // WIP
+    @GetMapping("/get/{id}")
+    public ResponseEntity<RecipeIngredients> getRecipeById(@PathVariable("id") Long id) {
+        RecipeIngredients recipeIngredients = recipeIngredientsService.getRecipeIngredientById(id);
+        if(recipeIngredients != null)
+            return new ResponseEntity<>(recipeIngredients, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
