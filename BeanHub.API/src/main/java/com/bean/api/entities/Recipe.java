@@ -28,8 +28,11 @@ public class Recipe {
     private LocalDateTime dateAdded;
 
     @ManyToOne
-    @JoinColumn(name = "User_ID", nullable = false)
+    @JoinColumn(name = "User_ID")
     private User user;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeIngredients> recipeIngredients;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Rating> ratings;
@@ -88,6 +91,14 @@ public class Recipe {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<RecipeIngredients> getRecipeIngredients() {
+        return recipeIngredients;
+    }
+
+    public void setRecipeIngredients(List<RecipeIngredients> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
     }
 
     public LocalDateTime getDateAdded() {

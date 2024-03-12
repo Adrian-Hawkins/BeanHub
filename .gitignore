@@ -39,3 +39,4 @@ terraform.rc
 application.yml
 .env
 *.log
+*.class
