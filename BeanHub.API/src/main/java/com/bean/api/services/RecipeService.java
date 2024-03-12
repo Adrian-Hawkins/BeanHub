@@ -5,8 +5,18 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class RecipeService {
@@ -32,6 +42,90 @@ public class RecipeService {
     @Transactional(readOnly = false)
     public Recipe getRecipeById(Long recipeId) {
         return entityManager.find(Recipe.class, recipeId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Recipe> getFilteredRecipesByUsername(String username) {
+        String jpql = "SELECT r FROM Recipe r JOIN r.user u WHERE u.username = :username ORDER BY u.username";
+        TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
+        query.setParameter("username", username);
+        return query.getResultList();
+    }
+
+    public List<Recipe> getSortedExplore(@RequestParam(value = "sort", defaultValue = "newest") String sort) {
+        String jpql = "SELECT r.recipeId FROM Recipe r";
+        TypedQuery<Integer> query = entityManager.createQuery(jpql, Integer.class);
+        List<Integer> recipeIds = query.getResultList();
+
+        Map<Integer, Double> averageRatings = getAverageRatings(recipeIds);
+
+        switch (sort) {
+            case "newest":
+                return getSortedRecipesByDateAdded(recipeIds,
+                        Comparator.nullsLast(Comparator.reverseOrder()));
+            case "oldest":
+                return getSortedRecipesByDateAdded(recipeIds,
+                        Comparator.nullsLast(Comparator.naturalOrder()));
+            case "highest rated":
+                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
+            case "lowest rated":
+                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
+            default:
+                return getSortedRecipesByDateAdded(recipeIds,
+                        Comparator.nullsLast(Comparator.reverseOrder()));
+        }
+    }
+
+    private Map<Integer, Double> getAverageRatings(List<Integer> recipeIds) {
+        String ratingJpql = "SELECT AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId = :recipeId";
+        Map<Integer, Double> averageRatings = new HashMap<>();
+        for (Integer recipeId : recipeIds) {
+            TypedQuery<Double> avgQuery = entityManager.createQuery(ratingJpql, Double.class);
+            avgQuery.setParameter("recipeId", recipeId);
+            Double avgRating = avgQuery.getSingleResult();
+            averageRatings.put(recipeId, avgRating != null ? avgRating : 0.0);
+        }
+        return averageRatings;
+    }
+
+    private List<Recipe> getSortedRecipesByDateAdded(List<Integer> recipeIds, Comparator<Long> comparator) {
+        String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
+        TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
+        recipeQuery.setParameter("recipeIds", recipeIds);
+        List<Recipe> recipes = recipeQuery.getResultList();
+        recipes.sort((r1, r2) -> {
+            LocalDateTime date1 = r1.getDateAdded();
+            LocalDateTime date2 = r2.getDateAdded();
+            return comparator.compare(date1 != null ? date1.toEpochSecond(ZoneOffset.UTC) : null,
+                    date2 != null ? date2.toEpochSecond(ZoneOffset.UTC) : null);
+        });
+        return recipes;
+    }
+
+    private List<Recipe> getSortedRecipesByAverageRating(List<Integer> recipeIds, Map<Integer, Double> averageRatings,
+            String sort) {
+        switch (sort) {
+            case "lowest rated":
+                recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
+                break;
+            case "highest rated":
+                recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
+                break;
+            default:
+                break;
+        }
+        // Fetch all recipes from the database
+        List<Recipe> allRecipes = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class).getResultList();
+        Map<Integer, Recipe> recipeMap = allRecipes.stream()
+                .collect(Collectors.toMap(Recipe::getRecipeId, Function.identity()));
+        List<Recipe> sortedRecipes = new ArrayList<>();
+        for (Integer recipeId : recipeIds) {
+            Recipe recipe = recipeMap.get(recipeId);
+            if (recipe != null) {
+                sortedRecipes.add(recipe);
+            }
+        }
+        return sortedRecipes;
     }
 
     @Transactional(readOnly = true)
