@@ -1,5 +1,7 @@
 package com.bean.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -13,27 +15,28 @@ import jakarta.persistence.JoinColumn;
 public class RecipeIngredients {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer recipeIngredientsId;
+    private Long recipeIngredientsId;
 
     @ManyToOne
-    @JoinColumn(name = "Ingredient_ID", nullable = false)
+    @JoinColumn(name = "Ingredient_ID")
     private Ingredient ingredient;
 
     @ManyToOne
-    @JoinColumn(name = "Recipe_ID", nullable = false)
+    @JoinColumn(name = "Recipe_ID")
+    @JsonIgnore
     private Recipe recipe;
 
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "Unit_ID", nullable = false)
+    @JoinColumn(name = "Unit_ID")
     private Unit unit;
 
-    public Integer getRecipeIngredientsId() {
+    public Long getRecipeIngredientsId() {
         return recipeIngredientsId;
     }
 
-    public void setRecipeIngredientsId(Integer recipeIngredientsId) {
+    public void setRecipeIngredientsId(Long recipeIngredientsId) {
         this.recipeIngredientsId = recipeIngredientsId;
     }
 
