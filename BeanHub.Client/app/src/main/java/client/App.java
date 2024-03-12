@@ -22,7 +22,7 @@ public class App {
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
     private static final Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
-    private static final PostRecipe postRecipe = new PostRecipe("Adrian");
+    private static final PostRecipe postRecipe = new PostRecipe();
 
     private static boolean hasLoggedIn=false;
 
@@ -32,7 +32,7 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         // Log in here
-        String[] userOptions = {"Sign up", "Log in", "Exit"};
+        String[] userOptions = {"Log in", "Exit"};
         boolean hasLoggedIn = false;
         while (!hasLoggedIn) {
             System.out.println("Select what you want to do:");
@@ -53,13 +53,9 @@ public class App {
 
             switch (userOption) {
                 case 1:
-                    //Sign up
-                    // Make them log in
-                    hasLoggedIn = true;
-                    break;
-                case 2:
                     //Log in
-                    hasLoggedIn = true;
+                    hasLoggedIn = Authentication.loginFlow();
+                    System.out.println("Logged in: " + hasLoggedIn);
                     break;
                 default:
                     scanner.close();
@@ -92,14 +88,16 @@ public class App {
                     break;
                 case 2:
                     // View my recipes
-                    ViewPastRecipes oldRecipeView = new ViewPastRecipes("test-user");
+                    ViewPastRecipes oldRecipeView = new ViewPastRecipes(Authentication.getUsername()); // Make sure this changes after auth is sorted.
+                    oldRecipeView.UserInteraction();
                     break;
                 case 3:
                     // View my explore page
                     break;
                 case 4:
                     // Post a new recipe
-                    System.out.println(postRecipe.construct());
+                    // System.out.println(postRecipe.post());
+                    postRecipe.post(Authentication.getUsername());
                     break;
                 default:
                     // Log out and then kill the program

@@ -1,0 +1,1 @@
+EXEC sp_rename 'recipe_ingredients.RecipeIngredients_ID', 'recipe_ingredients_id', 'COLUMN';
