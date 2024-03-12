@@ -42,19 +42,19 @@ public class RatingService {
     }
 
     @Transactional(readOnly = false)
-    public Rating getRatingById(Integer ratingId) {
+    public Rating getRatingById(Long ratingId) {
         return entityManager.find(Rating.class, ratingId);
     }
 
     public List<Recipe> getSortedFeed(@RequestParam(value = "userId") int userId,
-            @RequestParam(value = "sort", defaultValue = "newest") String sort) {
+                                      @RequestParam(value = "sort", defaultValue = "newest") String sort) {
 
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
-        TypedQuery<Integer> query = entityManager.createQuery(jpql, Integer.class);
+        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
         query.setParameter("userId", userId);
-        List<Integer> recipeIds = query.getResultList();
+        List<Long> recipeIds = query.getResultList();
 
-        Map<Integer, Double> averageRatings = getAverageRatings(recipeIds);
+        Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
         switch (sort) {
             case "newest":
@@ -70,10 +70,10 @@ public class RatingService {
         }
     }
 
-    private Map<Integer, Double> getAverageRatings(List<Integer> recipeIds) {
+    private Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
         String ratingJpql = "SELECT AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId = :recipeId";
-        Map<Integer, Double> averageRatings = new HashMap<>();
-        for (Integer recipeId : recipeIds) {
+        Map<Long, Double> averageRatings = new HashMap<>();
+        for (Long recipeId : recipeIds) {
             TypedQuery<Double> avgQuery = entityManager.createQuery(ratingJpql, Double.class);
             avgQuery.setParameter("recipeId", recipeId);
             Double avgRating = avgQuery.getSingleResult();
@@ -82,7 +82,7 @@ public class RatingService {
         return averageRatings;
     }
 
-    private List<Recipe> getSortedRecipesByDateAdded(List<Integer> recipeIds, Comparator<Long> comparator) {
+    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, Comparator<Long> comparator) {
         String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
         TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
         recipeQuery.setParameter("recipeIds", recipeIds);
@@ -96,8 +96,8 @@ public class RatingService {
         return recipes;
     }
 
-    private List<Recipe> getSortedRecipesByAverageRating(List<Integer> recipeIds, Map<Integer, Double> averageRatings,
-            String sort) {
+    private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
+                                                         String sort) {
         switch (sort) {
             case "lowest rated":
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
@@ -110,10 +110,10 @@ public class RatingService {
         }
         // Fetch all recipes from the database
         List<Recipe> allRecipes = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class).getResultList();
-        Map<Integer, Recipe> recipeMap = allRecipes.stream()
+        Map<Long, Recipe> recipeMap = allRecipes.stream()
                 .collect(Collectors.toMap(Recipe::getRecipeId, Function.identity()));
         List<Recipe> sortedRecipes = new ArrayList<>();
-        for (Integer recipeId : recipeIds) {
+        for (Long recipeId : recipeIds) {
             Recipe recipe = recipeMap.get(recipeId);
             if (recipe != null) {
                 sortedRecipes.add(recipe);
@@ -121,7 +121,6 @@ public class RatingService {
         }
         return sortedRecipes;
     }
-
     @Transactional(readOnly = true)
     public List<Rating> getAllRatings() {
         String jpql = "SELECT r FROM Rating r";
