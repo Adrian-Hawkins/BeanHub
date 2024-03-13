@@ -23,13 +23,19 @@ public class ViewPastRecipes {
     private final String mainURL = System.getenv("BEANHUB_API_URL");
     private Recipe[] userRecipes;
     private final Scanner scanner;
+    private final String accessToken;
 
-    public ViewPastRecipes(String userName) throws IOException, InterruptedException{
+    public ViewPastRecipes(String userName, String accessToken) throws IOException, InterruptedException{
+        this.accessToken = accessToken;
         scanner = new Scanner(System.in);
         String url = mainURL + "/api/viewpastrecipes/getUserRecipes?username="+userName;
         
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .header("Authorization", "Bearer " + this.accessToken)
+            .GET()
+            .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Gson gson = new Gson();
         JsonArray jsonarr = gson.fromJson(response.body(), JsonArray.class);
@@ -134,7 +140,7 @@ public class ViewPastRecipes {
                         break;
                     case 2:
                         // Delete the recipe if no ratings are there
-                        boolean recipeDeleted = deleteRecipe(userRecipes[userOption-1]);
+                        boolean recipeDeleted = deleteRecipe(userRecipes[userOption-1], this.accessToken);
                         if (recipeDeleted){
                             Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe deleted successfully!");
                         } else {
@@ -163,11 +169,14 @@ public class ViewPastRecipes {
         }
     }
 
-    private boolean deleteRecipe(Recipe recipeToDelete) throws IOException, InterruptedException{
+    private boolean deleteRecipe(Recipe recipeToDelete, String accessToken) throws IOException, InterruptedException{
         String url = mainURL + "/api/viewpastrecipes/deleteRecipe?recipeID="+recipeToDelete.getRecipeID();
         
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).DELETE().build();
+        HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create(url))
+        .header("Authorization", "Bearer " + this.accessToken)
+        .DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Gson gson = new Gson();
         var ans = gson.fromJson(response.body(), Boolean.class);
