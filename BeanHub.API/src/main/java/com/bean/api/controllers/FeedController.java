@@ -27,7 +27,8 @@ public class FeedController {
     @GetMapping("/feed")
     public List<Recipe> getAllRecipeIngredients() {
         int u = userService.getUserByUsername("test-user").getUserId();
-        List<Recipe> recipes = ratingService.getRatedRecipesByUserId(u);
+        List<Recipe> recipes = ratingService.getSortedFeed(u, "highest rated");
+
         return recipes;
     }
 }

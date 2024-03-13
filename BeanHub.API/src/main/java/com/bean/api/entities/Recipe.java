@@ -10,19 +10,22 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "[Recipe]")
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer recipeId;
+    private Long recipeId;
 
     private String recipeName;
     private String recipeShortDescription;
     private Integer prepTime;
     private Integer cookingTime;
     private String recipeSteps;
+    private LocalDateTime dateAdded;
 
     @ManyToOne
     @JoinColumn(name = "User_ID")
@@ -34,11 +37,11 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Rating> ratings;
 
-    public Integer getRecipeId() {
+    public Long getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(Integer recipeId) {
+    public void setRecipeId(Long recipeId) {
         this.recipeId = recipeId;
     }
 
@@ -96,5 +99,14 @@ public class Recipe {
 
     public void setRecipeIngredients(List<RecipeIngredients> recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
+    }
+
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded() {
+        LocalDateTime date = LocalDateTime.now();
+        this.dateAdded = date;
     }
 }
