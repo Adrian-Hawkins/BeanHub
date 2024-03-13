@@ -41,3 +41,4 @@ application.yml
 *.log
 *.class
 BeanHub.Client/setenv.ps1
+.vscode/*
