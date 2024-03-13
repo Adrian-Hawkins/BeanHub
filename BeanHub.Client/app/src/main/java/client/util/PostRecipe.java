@@ -1,27 +1,50 @@
 package client.util;
 
+import client.helpers.JSONParser;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 public class PostRecipe {
 
     private final Scanner scanner;
-    private String username;
     private final String BASE_URL = System.getenv("BEANHUB_API_URL");
-
-    public PostRecipe(String username) {
-        this.username = username;
+    private final static JSONParser jsonParser = new JSONParser();
+    public PostRecipe() {
         this.scanner = new Scanner(System.in);
     }
 
-    public Map<String, Object> construct() {
+    public void post(String username, String accessToken) throws IOException, InterruptedException {
+        Map<String, Object> requestBody = construct(username);
+        String url = BASE_URL + "/recipe/post";
+        Gson gson = new Gson();
+        String jsonBody = gson.toJson(requestBody);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(jsonParser.getItem(response.body(), "status"));
+    }
+
+    public Map<String, Object> construct(String username) {
         Map<String, Object> recipe = new HashMap<String, Object>();
-        recipe.put("user", getUser());
+        recipe.put("user", getUser(username));
         recipe.put("recipe", inputRecipe());
         recipe.put("recipeIngredients", constructRecipeIngredients());
         return recipe;
     }
 
-    public Map<String, Object> getUser() {
+    public Map<String, Object> getUser(String username) {
         Map<String, Object> user = new HashMap<String, Object>();
         user.put("username", username);
         return user;

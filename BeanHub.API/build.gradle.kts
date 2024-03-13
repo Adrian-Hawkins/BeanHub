@@ -22,6 +22,9 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.microsoft.sqlserver:mssql-jdbc")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.apache.httpcomponents:httpclient:4.5.13")
+	implementation("com.google.code.gson:gson:2.8.8")
+
 }
 
 tasks.withType<Test> {

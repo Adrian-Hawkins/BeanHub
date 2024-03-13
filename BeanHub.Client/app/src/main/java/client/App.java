@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import client.util.PostRecipe;
+import client.util.ViewPastRecipes;
 import client.util.Colors;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,17 +22,17 @@ public class App {
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
     private static final Auth Authentication =  new Auth(System.getenv("BEANHUB_CLIENT_ID"));
 
-    private static final PostRecipe postRecipe = new PostRecipe("Adrian");
+    private static final PostRecipe postRecipe = new PostRecipe();
 
     private static boolean hasLoggedIn=false;
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
         // Log in here
-        String[] userOptions = {"Sign up", "Log in", "Exit"};
+        String[] userOptions = {"Log in", "Exit"};
         boolean hasLoggedIn = false;
         while (!hasLoggedIn) {
             System.out.println("Select what you want to do:");
@@ -52,13 +53,8 @@ public class App {
 
             switch (userOption) {
                 case 1:
-                    //Sign up
-                    // Make them log in
-                    hasLoggedIn = true;
-                    break;
-                case 2:
                     //Log in
-                    hasLoggedIn = true;
+                    hasLoggedIn = Authentication.loginFlow();
                     break;
                 default:
                     scanner.close();
@@ -91,13 +87,16 @@ public class App {
                     break;
                 case 2:
                     // View my recipes
+                    ViewPastRecipes oldRecipeView = new ViewPastRecipes(Authentication.getUsername(), Authentication.getAccessToken()); // Make sure this changes after auth is sorted.
+                    oldRecipeView.UserInteraction();
                     break;
                 case 3:
                     // View my explore page
                     break;
                 case 4:
                     // Post a new recipe
-                    postRecipe.construct();
+                    // System.out.println(postRecipe.post());
+                    postRecipe.post(Authentication.getUsername(), Authentication.getAccessToken());
                     break;
                 default:
                     // Log out and then kill the program
