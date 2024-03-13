@@ -96,7 +96,7 @@ public class App {
                 case 4:
                     // Post a new recipe
                     // System.out.println(postRecipe.post());
-                    postRecipe.post(Authentication.getUsername());
+                    postRecipe.post(Authentication.getUsername(), Authentication.getAccessToken());
                     break;
                 default:
                     // Log out and then kill the program

@@ -19,7 +19,7 @@ public class PostRecipe {
         this.scanner = new Scanner(System.in);
     }
 
-    public void post(String username) throws IOException, InterruptedException {
+    public void post(String username, String accessToken) throws IOException, InterruptedException {
         Map<String, Object> requestBody = construct(username);
         String url = BASE_URL + "/recipe/post";
         Gson gson = new Gson();
@@ -29,6 +29,7 @@ public class PostRecipe {
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

@@ -14,7 +14,7 @@ public class EditRecipe {
 
     private final String BASE_URL = System.getenv("BEANHUB_API_URL");
 
-    public void edit(Long id, String newName) throws IOException, InterruptedException {
+    public void edit(Long id, String newName, String accessToken) throws IOException, InterruptedException {
         Map<String, Object> requestBody = new HashMap<>();
         String url = BASE_URL + "/recipe/update";
         requestBody.put("recipeId", id);
@@ -26,6 +26,7 @@ public class EditRecipe {
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
                 // WHY TF CAN I NOT MAKE PATCH REQUESTS???
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
