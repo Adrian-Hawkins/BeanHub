@@ -50,7 +50,7 @@ class RecipeServiceTest {
     @Test
     void updateRecipe() {
         Recipe recipe = new Recipe();
-        recipe.setRecipeId(1);
+        recipe.setRecipeId(1L);
         recipe.setRecipeName("Pizza Margherita");
         recipe.setRecipeShortDescription("Traditional Neapolitan pizza");
         recipe.setPrepTime(30);
@@ -66,7 +66,7 @@ class RecipeServiceTest {
     @Test
     void deleteRecipe() {
         Recipe recipe = new Recipe();
-        recipe.setRecipeId(1);
+        recipe.setRecipeId(1L);
         recipe.setRecipeName("Chocolate Cake");
         recipe.setRecipeShortDescription("Moist and rich cake");
         recipe.setPrepTime(20);
@@ -110,7 +110,7 @@ class RecipeServiceTest {
     @Test
     void getAllRecipes() {
         Recipe recipe1 = new Recipe();
-        recipe1.setRecipeId(1);
+        recipe1.setRecipeId(1L);
         recipe1.setRecipeName("Spaghetti Bolognese");
         recipe1.setRecipeShortDescription("Classic Italian meat sauce");
         recipe1.setPrepTime(20);
@@ -119,7 +119,7 @@ class RecipeServiceTest {
         recipe1.setUser(new User());
 
         Recipe recipe2 = new Recipe();
-        recipe2.setRecipeId(2);
+        recipe2.setRecipeId(2L);
         recipe2.setRecipeName("Chicken Curry");
         recipe2.setRecipeShortDescription("Aromatic and flavorful curry");
         recipe2.setPrepTime(30);
