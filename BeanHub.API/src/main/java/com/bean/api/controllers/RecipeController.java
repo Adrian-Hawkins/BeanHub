@@ -4,17 +4,18 @@ import com.bean.api.entities.*;
 import com.bean.api.requests.postRecipeRequest;
 import com.bean.api.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-public class RecipePostController {
+@RequestMapping("/recipe")
+public class RecipeController {
     @Autowired
     private RecipeService recipeService;
     @Autowired
@@ -28,7 +29,7 @@ public class RecipePostController {
 
     @Autowired
     private RecipeIngredientsService recipeIngredientsService;
-    @PostMapping("/postRecipe")
+    @PostMapping("/post")
     public Map<Object, Object> postRecipe(@RequestBody postRecipeRequest req) {
         Map<Object, Object> response = new HashMap<Object, Object>();
         try {
@@ -68,11 +69,19 @@ public class RecipePostController {
         }
     }
 
-    @GetMapping("/Tester")
-    public Map<Object, Object> test() {
-        Map<Object, Object> response = new HashMap<Object, Object>();
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") Long id) {
+        Recipe recipe = recipeService.getRecipeById(id);
+        if(recipe != null)
+            return new ResponseEntity<>(recipe, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-        response.put("recipeIngredients", recipeIngredientsService.getAllRecipeIngredients());
-        return  response;
+    @PutMapping("/update")
+    public Map<Object, Object> updateRecipe(@RequestBody Recipe recipe) {
+        Recipe r = recipeService.getRecipeById(recipe.getRecipeId());
+        r.setRecipeName(recipe.getRecipeName());
+        recipeService.updateRecipe(r);
+        return null;
     }
 }

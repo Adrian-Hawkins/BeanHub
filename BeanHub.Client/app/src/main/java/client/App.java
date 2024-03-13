@@ -72,7 +72,6 @@ public class App {
                 case 1:
                     //Log in
                     hasLoggedIn = Authentication.loginFlow();
-                    System.out.println("Logged in: " + hasLoggedIn);
                     break;
                 default:
                     scanner.close();
@@ -114,7 +113,7 @@ public class App {
                 case 4:
                     // Post a new recipe
                     // System.out.println(postRecipe.post());
-                    postRecipe.post(Authentication.getUsername());
+                    postRecipe.post(Authentication.getUsername(), Authentication.getAccessToken());
                     break;
                 default:
                     // Log out and then kill the program

@@ -16,6 +16,7 @@ public class Auth {
     private static final String BASE_URL = System.getenv("BEANHUB_API_URL");;
 
     private String username;
+    private static String accessToken;
 
     public Auth(String ClientId) {
         this.ClientId = ClientId;
@@ -95,6 +96,7 @@ public class Auth {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
             if (jsonObject.get("access_token") != null) {
+                accessToken = jsonObject.get("access_token").getAsString();
                 return jsonObject.get("access_token").getAsString();
             }
             Thread.sleep(5000);
@@ -120,6 +122,10 @@ public class Auth {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
     }
 
 }
