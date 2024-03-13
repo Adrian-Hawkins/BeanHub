@@ -22,7 +22,7 @@ public class ValidateToken {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
-        if(jsonObject.get("login").getAsString() != null) {
+        if(jsonObject.get("login") != null) {
             return true;
         }
         return false;
