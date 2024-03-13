@@ -121,6 +121,20 @@ public class RatingService {
         }
         return sortedRecipes;
     }
+
+    public Double getAverageRatingByRecipeId(int recipeId) {
+        String ratingJpql = "SELECT AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId = :recipeId";
+        TypedQuery<Double> avgQuery = entityManager.createQuery(ratingJpql, Double.class);
+        avgQuery.setParameter("recipeId", recipeId);
+        Double avgRating = avgQuery.getSingleResult();
+        if (avgRating != null) {
+            avgRating = Math.round(avgRating * 10.0) / 10.0;
+        } else {
+            avgRating = 0.0;
+        }
+        return avgRating;
+    }
+    
     @Transactional(readOnly = true)
     public List<Rating> getAllRatings() {
         String jpql = "SELECT r FROM Rating r";

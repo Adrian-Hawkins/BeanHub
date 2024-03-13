@@ -104,7 +104,7 @@ public class App {
                     break;
                 case 2:
                     // View my recipes
-                    ViewPastRecipes oldRecipeView = new ViewPastRecipes(Authentication.getUsername()); // Make sure this changes after auth is sorted.
+                    ViewPastRecipes oldRecipeView = new ViewPastRecipes(Authentication.getUsername(), Authentication.getAccessToken()); // Make sure this changes after auth is sorted.
                     oldRecipeView.UserInteraction();
                     break;
                 case 3:

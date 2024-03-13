@@ -21,13 +21,13 @@ public class FeedController {
     @Autowired
     private RatingService ratingService;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     @GetMapping("/feed")
     public List<Recipe> getAllRecipeIngredients() {
-        int u = userService.getUserByUsername("test-user").getUserId();
-        List<Recipe> recipes = ratingService.getSortedFeed(u, "highest rated");
+        // int u = userService.getUserByUsername("test-user").getUserId();
+        List<Recipe> recipes = ratingService.getSortedFeed(6, "highest rated");
 
         return recipes;
     }
