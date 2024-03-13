@@ -77,11 +77,11 @@ public class RecipeController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    WIP
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public Map<Object, Object> updateRecipe(@RequestBody Recipe recipe) {
-        System.out.println(recipe.getRecipeName());
-//        recipeService.updateRecipe(recipe);
+        Recipe r = recipeService.getRecipeById(recipe.getRecipeId());
+        r.setRecipeName(recipe.getRecipeName());
+        recipeService.updateRecipe(r);
         return null;
     }
 }

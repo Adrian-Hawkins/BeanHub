@@ -18,7 +18,7 @@ import java.util.Date;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer recipeId;
+    private Long recipeId;
 
     private String recipeName;
     private String recipeShortDescription;
@@ -37,11 +37,11 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Rating> ratings;
 
-    public Integer getRecipeId() {
+    public Long getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(Integer recipeId) {
+    public void setRecipeId(Long recipeId) {
         this.recipeId = recipeId;
     }
 

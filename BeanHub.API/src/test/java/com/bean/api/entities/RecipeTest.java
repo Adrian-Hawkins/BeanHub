@@ -32,7 +32,7 @@ public class RecipeTest {
 
     @Test
     public void testRecipeId() {
-        recipe.setRecipeId(1);
+        recipe.setRecipeId(1L);
         assertEquals(1, recipe.getRecipeId());
     }
 
