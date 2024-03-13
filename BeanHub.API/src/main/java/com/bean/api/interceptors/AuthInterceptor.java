@@ -11,30 +11,20 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-//    @Override
-//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        return true;
-//    }
     private Logger LOG = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = request.getHeader("Authorization");
         LOG.info("preHandle invoked...{}:{}     {}"+request.getRequestURI(),request.getMethod(), accessToken);
         if (accessToken != null && accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7); // Remove "Bearer " prefix
+            accessToken = accessToken.substring(7);
             boolean isValidToken = ValidateToken.validate(accessToken);
             if (isValidToken) {
-                return true; // Proceed with the request
+                return true;
             }
         }
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false; // Abort the request
+        return false;
     }
-
-//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-//    }
-//
-//    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-//    }
 
 }
