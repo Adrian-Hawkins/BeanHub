@@ -20,6 +20,7 @@ public class PostRecipe {
     }
 
     public void post(String username, String accessToken) throws IOException, InterruptedException {
+        System.out.print(Colors.PURPLE_UNDERLINED);
         Map<String, Object> requestBody = construct(username);
         String url = BASE_URL + "/recipe/post";
         Gson gson = new Gson();
@@ -34,6 +35,7 @@ public class PostRecipe {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(jsonParser.getItem(response.body(), "status"));
+        System.out.println(Colors.RESET);
     }
 
     public Map<String, Object> construct(String username) {

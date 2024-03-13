@@ -24,6 +24,7 @@ public class Auth {
 
     public Boolean loginFlow() {
         try {
+            System.out.print(Colors.RED);
             this.username = GetCode();
             Map<String, String> body = new HashMap<String, String>();
             if(this.username == null)
@@ -45,6 +46,8 @@ public class Auth {
             return true;
         } catch (IOException | InterruptedException e) {
             return false;
+        } finally {
+            System.out.println(Colors.RESET);
         }
     }
     public String GetCode() throws IOException, InterruptedException {
