@@ -17,16 +17,18 @@ public class ViewExplore {
     // pageSize * (pageNumber-1) ROWS FETCH NEXT pageSize ROWS ONLY;
     private final int pageSize = 5;
     private int pageNumber = 1;
+    private int filterOptionNumber=1;
     private final int maxNumPages;
     private final String mainURL = System.getenv("BEANHUB_API_URL");
     private FeedExplore[] allRecipes;
     private final Scanner scanner;
     private final String accessToken;
 
-    public ViewExplore(String accessToken) throws IOException, InterruptedException {
+    public ViewExplore(String accessToken, String filterChoice) throws IOException, InterruptedException {
         this.accessToken = accessToken;
+
         scanner = new Scanner(System.in);
-        String url = mainURL + "/api/explore/getallrecipes";
+        String url = mainURL + "/api/explore/getallrecipes/"+filterChoice;
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -37,26 +39,6 @@ public class ViewExplore {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Gson gson = new Gson();
         JsonArray jsonarr = gson.fromJson(response.body(), JsonArray.class);
-        // System.out.println("Printing jsonarr...");
-        // System.out.println(jsonarr);
-
-        // int recipeId;
-        // String averageUrl = mainURL + "/api/explore/getaveragerating/" + recipeId;
-        // HttpClient averageClient = HttpClient.newHttpClient();
-        // HttpRequest averageRequest = HttpRequest.newBuilder()
-        // .uri(URI.create(averageUrl))
-        // .header("Authorization", "Bearer " + this.accessToken)
-        // .GET()
-        // .build();
-        // HttpResponse<String> averageResponse = averageClient.send(averageRequest,
-        // HttpResponse.BodyHandlers.ofString());
-        // Double averageRating = averageResponse.body();
-        // System.out.println("average response = " + averageRating);
-        // Gson averageGson = new Gson();
-        // JsonArray averageJsonarr = averageGson.fromJson(averageResponse.body(),
-        // JsonArray.class);
-        // System.out.println("Printing averageJsonarr...");
-        // System.out.println(averageJsonarr);
 
         int numRecipes = jsonarr.size(); // SQL is: SELECT COUNT Recipe_ID from Recipe
         if (numRecipes <= 0) {
@@ -88,8 +70,6 @@ public class ViewExplore {
                     .build();
             HttpResponse<String> averageResponse = averageClient.send(averageRequest,
                     HttpResponse.BodyHandlers.ofString());
-            // Double averageRating = averageResponse.body();
-            System.out.println("average response  = " + averageResponse.body());
 
             allRecipes[i] = new FeedExplore(
                     currJsonObject.get("recipeId").getAsInt(),
@@ -100,13 +80,26 @@ public class ViewExplore {
                     currJsonObject.get("recipeSteps").getAsString(),
                     // currJsonObject.get("dateAdded").getAsString(),
                     "someDate",
-                    2.5);
+                    averageResponse.body());
 
         }
     }
 
     public void UserInteraction() throws IOException, InterruptedException {
+        
+        // Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
+        // String[] filterOptions = { "Newest", "Oldest", "Highest Rated","Lowest Rated" };
+        // String[] filteroptionColors = { Colors.RED, Colors.GREEN, Colors.RED, Colors.GREEN};
+        // int filterHighNumber = filterOptionNumber * (pageSize);
+        // int filterLowNumber = (filterOptionNumber - 1) * (pageSize);
+
+        // for (int i = 0; i < filterOptions.length; i++) {
+        //     System.out.println(Colors.WHITE_BOLD + (i - filterLowNumber + 1) + ": " + Colors.RESET + filterOptions[i]);
+        // }
+        // String filterChoice = scanner.nextLine();
+        
         while (true) {
+            ///NEW SCREEN
             Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select what you want to do.");
             String[] userOptions = { "Previous page", "Next page", "Back to home" };
             String[] optionColors = { Colors.BLUE, Colors.GREEN, Colors.YELLOW };
@@ -116,6 +109,8 @@ public class ViewExplore {
             if (highNumber > allRecipes.length) {
                 highNumber = allRecipes.length;
             }
+
+           
 
             for (int i = lowNumber; i < highNumber; i++) {
                 System.out.println(Colors.WHITE_BOLD + (i - lowNumber + 1) + ": " + Colors.RESET +
@@ -189,17 +184,5 @@ public class ViewExplore {
         }
     }
 
-    private boolean deleteRecipe(Recipe recipeToDelete, String accessToken) throws IOException, InterruptedException {
-        String url = mainURL + "/api/viewpastrecipes/deleteRecipe?recipeID=" + recipeToDelete.getRecipeID();
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Authorization", "Bearer " + this.accessToken)
-                .DELETE().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        Gson gson = new Gson();
-        var ans = gson.fromJson(response.body(), Boolean.class);
-        return ans;
-    }
+  
 }

@@ -28,9 +28,9 @@ public class ExploreController {
     @Autowired
     private RatingService ratingService;
 
-    @GetMapping("/getallrecipes")
-    public List<Recipe> getAllRecipes() {
-        List<Recipe> recipes = recipeService.getSortedExplore("lowest rated");
+    @GetMapping("/getallrecipes/{filterValue}")
+    public List<Recipe> getAllRecipes(@PathVariable("filterValue") String filterValue) {
+        List<Recipe> recipes = recipeService.getSortedExplore(filterValue);
         return recipes;
     }
 

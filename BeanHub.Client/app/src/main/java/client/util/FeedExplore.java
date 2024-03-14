@@ -13,7 +13,7 @@ public class FeedExplore {
     private Integer cookingTime;
     private String recipeSteps;
     private String date;
-    private Double averageRating;
+    private String averageRating;
 
     @Override
     public String toString() {
@@ -50,13 +50,13 @@ public class FeedExplore {
         return date;
     }
 
-    public Double getAverageRating() {
+    public String getAverageRating() {
         return averageRating;
     }
 
     public FeedExplore(int recipeID, String recipeName, String recipeShortDescription, Integer prepTime,
             Integer cookingTime,
-            String recipeSteps, String date, Double averageRating) {
+            String recipeSteps, String date, String averageRating) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.recipeShortDescription = recipeShortDescription;

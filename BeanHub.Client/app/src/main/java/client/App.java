@@ -102,6 +102,7 @@ public class App {
             switch (userOption) {
                 case 1:
                     // View personalised feed
+
                     break;
                 case 2:
                     // View my recipes
@@ -111,8 +112,17 @@ public class App {
                     break;
                 case 3:
                     // View my explore page
+                    Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
+                    String[] filterOptions = { "Newest", "Oldest", "Highest Rated","Lowest Rated" };
+                    String[] filteroptionColors = { Colors.RED, Colors.GREEN, Colors.RED, Colors.GREEN};
+
+                    for (int i = 0; i < filterOptions.length; i++) {
+                        System.out.println(Colors.WHITE_BOLD + (i+1) + ": " + Colors.RESET + filterOptions[i]);
+                    }
+                    String filterChoice = scanner.nextLine();
+
                     ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken()); // Make sure this
-                                                                                                // changes after auth is
+                    exploreView.UserInteraction();                                                              // changes after auth is
                                                                                                 // sorted.
                     break;
                 case 4:
