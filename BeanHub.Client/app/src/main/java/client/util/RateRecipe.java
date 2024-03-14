@@ -54,8 +54,7 @@ public class RateRecipe {
         .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        var ans = gson.fromJson(response.body(), String.class);
-        System.out.println(ans);
+        String ans = gson.fromJson(response.body(), String.class);
+        Colors.printColor(Colors.PURPLE_BOLD_BRIGHT, ans + " recipe rating!!!");
     }
-
 }
