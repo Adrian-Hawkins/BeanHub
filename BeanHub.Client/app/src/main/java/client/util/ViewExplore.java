@@ -17,7 +17,7 @@ public class ViewExplore {
     // pageSize * (pageNumber-1) ROWS FETCH NEXT pageSize ROWS ONLY;
     private final int pageSize = 5;
     private int pageNumber = 1;
-    private int filterOptionNumber=1;
+    private int filterOptionNumber = 1;
     private final int maxNumPages;
     private final String mainURL = System.getenv("BEANHUB_API_URL");
     private FeedExplore[] allRecipes;
@@ -28,7 +28,7 @@ public class ViewExplore {
         this.accessToken = accessToken;
 
         scanner = new Scanner(System.in);
-        String url = mainURL + "/api/explore/getallrecipes/"+filterChoice;
+        String url = mainURL + "/api/explore/getallrecipes/" + filterChoice;
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -78,20 +78,17 @@ public class ViewExplore {
                     currJsonObject.get("prepTime").getAsInt(),
                     currJsonObject.get("cookingTime").getAsInt(),
                     currJsonObject.get("recipeSteps").getAsString(),
-                    // currJsonObject.get("dateAdded").getAsString(),
-                    "someDate",
+                    currJsonObject.get("dateAdded").getAsString(),
                     averageResponse.body());
-
         }
     }
 
     public void UserInteraction() throws IOException, InterruptedException {
-        
+
         while (true) {
-            ///NEW SCREEN
+            /// NEW SCREEN
             Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select what you want to do.");
             String[] userOptions = { "Previous page", "Next page", "Back to home" };
-            String[] optionColors = { Colors.BLUE, Colors.GREEN, Colors.YELLOW };
 
             int lowNumber = (pageNumber - 1) * (pageSize);
             int highNumber = pageNumber * (pageSize);
@@ -125,7 +122,7 @@ public class ViewExplore {
                 System.out.println(allRecipes[userOption - 1]);
                 Colors.printColor(Colors.WHITE_BOLD, "Go Back");
                 String[] currOptions = { "Back" };
-                String[] currColors = {Colors.RED};
+                String[] currColors = { Colors.RED };
 
                 for (int i = 0; i < currOptions.length; i++) {
                     Colors.printColor(currColors[i], (i + 1) + ": " + currOptions[i]);
@@ -163,5 +160,4 @@ public class ViewExplore {
         }
     }
 
-  
 }
