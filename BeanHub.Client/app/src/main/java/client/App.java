@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import client.util.PostRecipe;
 import client.util.ViewExplore;
+import client.util.ViewFeed;
 import client.util.ViewPastRecipes;
 import client.util.Colors;
 import org.apache.http.HttpEntity;
@@ -101,8 +102,18 @@ public class App {
 
             switch (userOption) {
                 case 1:
-                    //View my explore page
+                    // View my feed page
+                    Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
+                    String[] feedFilterOptions = { "Newest", "Oldest", "Highest Rated", "Lowest Rated" };
 
+                    for (int i = 0; i < feedFilterOptions.length; i++) {
+                        System.out.println(Colors.WHITE_BOLD + (i + 1) + ": " + Colors.RESET + feedFilterOptions[i]);
+                    }
+                    String feedFilterChoice = scanner.nextLine();
+
+                    ViewFeed feedView = new ViewFeed(Authentication.getUsername(), Authentication.getAccessToken(),
+                            feedFilterChoice); // Make sure this
+                    feedView.UserInteraction();
                     break;
                 case 2:
                     // View my recipes
@@ -113,17 +124,18 @@ public class App {
                 case 3:
                     // View my explore page
                     Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
-                    String[] filterOptions = { "Newest", "Oldest", "Highest Rated","Lowest Rated" };
-                    String[] filteroptionColors = { Colors.RED, Colors.GREEN, Colors.RED, Colors.GREEN};
+                    String[] filterOptions = { "Newest", "Oldest", "Highest Rated", "Lowest Rated" };
 
                     for (int i = 0; i < filterOptions.length; i++) {
-                        System.out.println(Colors.WHITE_BOLD + (i+1) + ": " + Colors.RESET + filterOptions[i]);
+                        System.out.println(Colors.WHITE_BOLD + (i + 1) + ": " + Colors.RESET + filterOptions[i]);
                     }
                     String filterChoice = scanner.nextLine();
 
-                    ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken(),filterChoice); // Make sure this
-                    exploreView.UserInteraction();                                                              // changes after auth is
-                                                                                                // sorted.
+                    ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken(), filterChoice); // Make
+                                                                                                              // sure
+                                                                                                              // this
+                    exploreView.UserInteraction(); // changes after auth is
+                    // sorted.
                     break;
                 case 4:
                     // Post a new recipe
