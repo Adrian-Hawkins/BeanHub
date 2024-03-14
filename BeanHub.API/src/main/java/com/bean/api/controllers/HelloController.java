@@ -21,11 +21,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String helloWorld() {
-        User u = userService.getUserByUsername("test");
-//        System.out.println(u.getUsername());
-//        u.setUsername("test");
-//        userService.saveUser(u);
-        return u.getUsername();
+        return "Hgh";
     }
 
     
