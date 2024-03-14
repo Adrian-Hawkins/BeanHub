@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
@@ -13,15 +14,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ViewPastRecipes {
-    // Show recipes that the user has posted in pages of 5 recipes.
-    // SQL Should look like this:
-        // SELECT * FROM Recipe WHERE User_ID = userID ORDER BY Recipe_ID OFFSET pageSize * (pageNumber-1) ROWS FETCH NEXT pageSize ROWS ONLY;
     private final int userID;
     private final int pageSize = 5;
     private int pageNumber = 1;
     private final int maxNumPages;
     private final String mainURL = System.getenv("BEANHUB_API_URL");
-    private Recipe[] userRecipes;
+    private List<Recipe> userRecipes;
     private final Scanner scanner;
     private final String accessToken;
 
@@ -40,7 +38,7 @@ public class ViewPastRecipes {
         Gson gson = new Gson();
         JsonArray jsonarr = gson.fromJson(response.body(), JsonArray.class);
 
-        int numUserRecipes = jsonarr.size(); // SQL is: SELECT COUNT Recipe_ID from Recipe WHERE User_ID = userID
+        int numUserRecipes = jsonarr.size();
         if (numUserRecipes <= 0){
             Colors.printColor(Colors.RED_BOLD, "UPLOAD A RECIPE FIRST");
             this.maxNumPages = 0;
@@ -61,16 +59,15 @@ public class ViewPastRecipes {
         .getAsJsonObject().get("userId").getAsInt();
         this.userID = uID;
 
-        userRecipes = new Recipe[numUserRecipes];
         for (int i=0;i<numUserRecipes;i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
-            userRecipes[i] = new Recipe(
-            currJsonObject.get("recipeId").getAsInt(),
-            currJsonObject.get("recipeName").getAsString(),
-            currJsonObject.get("recipeShortDescription").getAsString(),
-            currJsonObject.get("prepTime").getAsInt(),
-            currJsonObject.get("cookingTime").getAsInt(),
-            currJsonObject.get("recipeSteps").getAsString());
+            userRecipes.add(new Recipe(
+                    currJsonObject.get("recipeId").getAsInt(),
+                    currJsonObject.get("recipeName").getAsString(),
+                    currJsonObject.get("recipeShortDescription").getAsString(),
+                    currJsonObject.get("prepTime").getAsInt(),
+                    currJsonObject.get("cookingTime").getAsInt(),
+                    currJsonObject.get("recipeSteps").getAsString()));
         }
     }
 
@@ -85,13 +82,13 @@ public class ViewPastRecipes {
             
             int lowNumber = (pageNumber-1) * (pageSize);
             int highNumber = pageNumber * (pageSize);
-            if (highNumber >  userRecipes.length){
-                highNumber = userRecipes.length;
+            if (highNumber >  userRecipes.size()){
+                highNumber = userRecipes.size();
             }
 
             for (int i=lowNumber;i<highNumber;i++){
                 System.out.println(Colors.WHITE_BOLD + (i-lowNumber+1) + ": " + Colors.RESET +
-                "View " + userRecipes[i].getRecipeName());
+                "View " + userRecipes.get(i).getRecipeName());
             }
 
             for (int i=0;i<userOptions.length;i++){
@@ -111,8 +108,7 @@ public class ViewPastRecipes {
             }
 
             if (userOption<=(highNumber-lowNumber)){
-                //View that recipe
-                System.out.println(userRecipes[userOption-1]);
+                System.out.println(userRecipes.get(userOption - 1));
                 Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
                 String[] currOptions = {"Edit recipe", "Delete recipe", "Back to home"};
                 String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.WHITE_BRIGHT};
@@ -137,7 +133,7 @@ public class ViewPastRecipes {
                 switch (viewRecipeOption) {
                     case 1:
                         //Edit the recipe here
-                        Long recID = (long) userRecipes[userOption-1].getRecipeID();
+                        Long recID = (long) userRecipes.get(userOption - 1).getRecipeID();
                         
                         String newName = "";
 
@@ -152,7 +148,7 @@ public class ViewPastRecipes {
                         return;
                     case 2:
                         // Delete the recipe if no ratings are there
-                        boolean recipeDeleted = deleteRecipe(userRecipes[userOption-1], this.accessToken);
+                        boolean recipeDeleted = deleteRecipe(userRecipes.get(userOption - 1), this.accessToken);
                         if (recipeDeleted){
                             Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe deleted successfully!");
                         } else {
