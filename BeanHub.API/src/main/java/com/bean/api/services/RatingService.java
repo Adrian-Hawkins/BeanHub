@@ -46,8 +46,7 @@ public class RatingService {
         return entityManager.find(Rating.class, ratingId);
     }
 
-    public List<Recipe> getSortedFeed(@RequestParam(value = "userId") int userId,
-                                      @RequestParam(value = "sort", defaultValue = "newest") String sort) {
+    public List<Recipe> getSortedFeed(int userId, String sort) {
 
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
@@ -57,13 +56,13 @@ public class RatingService {
         Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
         switch (sort) {
-            case "newest":
+            case "1":
                 return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.reverseOrder()));
-            case "oldest":
+            case "2":
                 return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.naturalOrder()));
-            case "highest rated":
+            case "3":
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
-            case "lowest rated":
+            case "4":
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
             default:
                 return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.reverseOrder()));
@@ -97,7 +96,7 @@ public class RatingService {
     }
 
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
-                                                         String sort) {
+            String sort) {
         switch (sort) {
             case "lowest rated":
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
@@ -134,7 +133,7 @@ public class RatingService {
         }
         return avgRating;
     }
-    
+
     @Transactional(readOnly = true)
     public List<Rating> getAllRatings() {
         String jpql = "SELECT r FROM Rating r";
