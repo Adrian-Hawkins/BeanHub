@@ -1,0 +1,23 @@
+name: Release
+
+on:
+    pull_request:
+        types:
+          - closed
+        branches:
+          - dev
+
+jobs:
+    Release:
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Get PR number
+              id: pr_number
+              run: echo "::set-output name=pr_number::${{ github.event.number }}"
+            - name: Add tag
+              run: |
+                  git tag -a "v${{ steps.pr_number.outputs.pr_number }}" -m "Tag added automatically by GitHub Actions for PR ${{ steps.pr_number.outputs.pr_number }}"
+                  git push --tags
