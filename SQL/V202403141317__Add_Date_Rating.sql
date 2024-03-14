@@ -1,0 +1,2 @@
+ALTER TABLE [Rating] 
+ADD CONSTRAINT DF_Rating_Date_Time_ DEFAULT GETDATE() FOR Rating_Date_Time;
