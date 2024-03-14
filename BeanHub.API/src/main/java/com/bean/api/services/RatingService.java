@@ -46,8 +46,7 @@ public class RatingService {
         return entityManager.find(Rating.class, ratingId);
     }
 
-    public List<Recipe> getSortedFeed(@RequestParam(value = "userId") int userId,
-            @RequestParam(value = "sort", defaultValue = "1") String sort) {
+    public List<Recipe> getSortedFeed(int userId, String sort) {
 
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
