@@ -3,7 +3,7 @@ Beanhub is a platform where bean enthusiasts can share bean-related recipes with
 
 ## AWS Setup
 AWS and our github workflows are set up in the following way:
-![AWS Setup goes here](AWS_Setup.jpeg)
+![AWS_Setup](https://github.com/Adrian-Hawkins/BeanHub/assets/157478510/e1d40b50-cdf5-444d-b976-33c5e487a870)
 
 ## To run the API
 ```cmd
@@ -39,6 +39,7 @@ db_username = "YOUR_DB_USERNAME"
 ```cli
 terraform apply -var-file="auth.tfvars"
 ```
+
 
 ## Destroy terraform
 ```cli
