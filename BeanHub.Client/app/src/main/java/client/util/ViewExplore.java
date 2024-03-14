@@ -19,7 +19,7 @@ public class ViewExplore {
     private int pageNumber = 1;
     private final int maxNumPages;
     private final String mainURL = System.getenv("BEANHUB_API_URL");
-    private Recipe[] allRecipes;
+    private FeedExplore[] allRecipes;
     private final Scanner scanner;
     private final String accessToken;
 
@@ -37,12 +37,30 @@ public class ViewExplore {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Gson gson = new Gson();
         JsonArray jsonarr = gson.fromJson(response.body(), JsonArray.class);
-        System.out.println("Printing jsonarr...");
-        System.out.println(jsonarr);
+        // System.out.println("Printing jsonarr...");
+        // System.out.println(jsonarr);
+
+        // int recipeId;
+        // String averageUrl = mainURL + "/api/explore/getaveragerating/" + recipeId;
+        // HttpClient averageClient = HttpClient.newHttpClient();
+        // HttpRequest averageRequest = HttpRequest.newBuilder()
+        // .uri(URI.create(averageUrl))
+        // .header("Authorization", "Bearer " + this.accessToken)
+        // .GET()
+        // .build();
+        // HttpResponse<String> averageResponse = averageClient.send(averageRequest,
+        // HttpResponse.BodyHandlers.ofString());
+        // Double averageRating = averageResponse.body();
+        // System.out.println("average response = " + averageRating);
+        // Gson averageGson = new Gson();
+        // JsonArray averageJsonarr = averageGson.fromJson(averageResponse.body(),
+        // JsonArray.class);
+        // System.out.println("Printing averageJsonarr...");
+        // System.out.println(averageJsonarr);
 
         int numRecipes = jsonarr.size(); // SQL is: SELECT COUNT Recipe_ID from Recipe
         if (numRecipes <= 0) {
-            Colors.printColor(Colors.RED_BOLD, "UPLOAD A RECIPE FIRST");
+            Colors.printColor(Colors.RED_BOLD, "No recipes available at this moment.");
             this.maxNumPages = 0;
             return;
         } else {
@@ -55,16 +73,35 @@ public class ViewExplore {
             this.maxNumPages = temp;
         }
 
-        allRecipes = new Recipe[numRecipes];
+        int recipeId;
+        allRecipes = new FeedExplore[numRecipes];
         for (int i = 0; i < numRecipes; i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
-            allRecipes[i] = new Recipe(
+            recipeId = currJsonObject.get("recipeId").getAsInt();
+
+            String averageUrl = mainURL + "/api/explore/getaveragerating/" + recipeId;
+            HttpClient averageClient = HttpClient.newHttpClient();
+            HttpRequest averageRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(averageUrl))
+                    .header("Authorization", "Bearer " + this.accessToken)
+                    .GET()
+                    .build();
+            HttpResponse<String> averageResponse = averageClient.send(averageRequest,
+                    HttpResponse.BodyHandlers.ofString());
+            // Double averageRating = averageResponse.body();
+            System.out.println("average response  = " + averageResponse.body());
+
+            allRecipes[i] = new FeedExplore(
                     currJsonObject.get("recipeId").getAsInt(),
                     currJsonObject.get("recipeName").getAsString(),
                     currJsonObject.get("recipeShortDescription").getAsString(),
                     currJsonObject.get("prepTime").getAsInt(),
                     currJsonObject.get("cookingTime").getAsInt(),
-                    currJsonObject.get("recipeSteps").getAsString());
+                    currJsonObject.get("recipeSteps").getAsString(),
+                    // currJsonObject.get("dateAdded").getAsString(),
+                    "someDate",
+                    2.5);
+
         }
     }
 
@@ -125,21 +162,13 @@ public class ViewExplore {
                     return;
                 }
 
-                switch (viewRecipeOption) {
-                    case 1:
-                        // Edit the recipe here
-                        break;
-                    case 2:
-                        // Delete the recipe if no ratings are there
-                        boolean recipeDeleted = deleteRecipe(allRecipes[userOption - 1], this.accessToken);
-                        if (recipeDeleted) {
-                            Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe deleted successfully!");
-                        } else {
-                            Colors.printColor(Colors.RED_BACKGROUND_BRIGHT, "Recipe cannot be deleted!!!");
-                        }
-                    default:
-                        return; // returns to the main page.
-                }
+                // switch (viewRecipeOption) {
+                // case 1:
+                // // Edit the recipe here
+                // break;
+                // default:
+                // return; // returns to the main page.
+                // }
             } else {
                 if (userOption == highNumber + 1) {
                     if (pageNumber == 1) {
