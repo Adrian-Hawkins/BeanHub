@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/explore")
 public class ExploreController {
     @Autowired
     private RecipeService recipeService;
 
-    @GetMapping("/explore")
-    public List<Recipe> getAllRecipeIngredients() {
+    @GetMapping("/getallrecipes")
+    public List<Recipe> getAllRecipes() {
         List<Recipe> recipes = recipeService.getSortedExplore("lowest rated");
         return recipes;
     }
