@@ -1,7 +1,12 @@
 package com.bean.api.services;
 
+import com.bean.api.entities.Rating;
 import com.bean.api.entities.Recipe;
+import com.bean.api.entities.User;
+
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +19,16 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Service
 public class RecipeService {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private EntityManager entityManager;
@@ -132,5 +141,44 @@ public class RecipeService {
         String jpql = "SELECT r FROM Recipe r";
         TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
         return query.getResultList();
+    }
+
+    
+    @Transactional(readOnly = false)
+    public String rateRecipe(Long recipeID, Long rating, Long userID) {
+        // Get if the recipe was rated
+        String jpql1 = "SELECT r FROM Rating r WHERE r.user.id = :userID AND r.recipe.id = :recipeID";
+        TypedQuery<Rating> query = entityManager.createQuery(jpql1, Rating.class);
+        
+        query.setParameter("userID", userID);
+        query.setParameter("recipeID", recipeID);
+
+        var queryOut = query.getResultList();
+        int rating_id = queryOut.size();
+
+        if (rating_id > 0){
+            //Update the table if rated by user already
+            String jpql2 = "UPDATE Rating r SET r.ratingValue = :newRating WHERE r.user.id = :userID AND r.recipe.id = :recipeID";
+            Query query2 = entityManager.createQuery(jpql2);
+
+            query2.setParameter("newRating", rating);
+            query2.setParameter("userID", userID);
+            query2.setParameter("recipeID", recipeID);
+            query2.executeUpdate();
+
+            return "Updated";
+        } else {
+            //Else insert to the table:
+            Recipe ratingRecipe = getRecipeById(recipeID);
+            User ratingUser = userService.getUserById(userID.intValue());
+            Rating newRating = new Rating();
+            newRating.setUser(ratingUser);
+            newRating.setRecipe(ratingRecipe);
+            newRating.setRatingValue(rating.intValue());
+            
+            entityManager.persist(newRating);
+
+            return "Added";
+        }
     }
 }
