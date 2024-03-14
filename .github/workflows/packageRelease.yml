@@ -1,33 +1,23 @@
-name: Create Release
+name: Release
 
 on:
-  push:
-    branches:
-        - "packageRelease"
+    pull_request:
+        types:
+          - closed
+        branches:
+          - dev
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      # Here you can add steps to build and test your project as needed
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by GitHub Actions, no need to create it manually
-        with:
-          tag_name: ${{ github.ref }} # Uses the tag of the commit that triggered the workflow
-          release_name: Release ${{ github.ref }} # Name of the release
-          body: |
-            Describe your release here.
-          draft: false # Set to true to create a draft release
-          prerelease: false # Set to true for a prerelease version
+    Release:
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Get PR number
+              id: pr_number
+              run: echo "::set-output name=pr_number::${{ github.event.number }}"
+            - name: Add tag
+              run: |
+                  git tag -a "v${{ steps.pr_number.outputs.pr_number }}" -m "Tag added automatically by GitHub Actions for PR ${{ steps.pr_number.outputs.pr_number }}"
+                  git push --tags
