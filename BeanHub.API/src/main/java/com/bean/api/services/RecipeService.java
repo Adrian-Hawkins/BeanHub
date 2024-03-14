@@ -61,7 +61,7 @@ public class RecipeService {
         return query.getResultList();
     }
 
-    public List<Recipe> getSortedExplore(@RequestParam(value = "sort", defaultValue = "newest") String sort) {
+    public List<Recipe> getSortedExplore(@RequestParam(value = "sort", defaultValue = "1") String sort) {
         String jpql = "SELECT r.recipeId FROM Recipe r";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
         List<Long> recipeIds = query.getResultList();
@@ -69,15 +69,15 @@ public class RecipeService {
         Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
         switch (sort) {
-            case "newest":
+            case "1": //newest
                 return getSortedRecipesByDateAdded(recipeIds,
                         Comparator.nullsLast(Comparator.reverseOrder()));
-            case "oldest":
+            case "2": //oldest
                 return getSortedRecipesByDateAdded(recipeIds,
                         Comparator.nullsLast(Comparator.naturalOrder()));
-            case "highest rated":
+            case "3": //highest rated
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
-            case "lowest rated":
+            case "4": //lowest rated
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
             default:
                 return getSortedRecipesByDateAdded(recipeIds,
