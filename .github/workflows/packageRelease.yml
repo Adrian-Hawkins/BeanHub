@@ -1,33 +1,68 @@
 
-name: "Create Release"
+# name: "Create Release"
+
+# on:
+#     push:
+#       # Sequence of patterns matched against refs/tags
+#       branches:
+#         - "packageRelease"
+#     #   tags:
+#     #     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    
+    
+# jobs:
+#     build:
+#       name: Create Release
+#       runs-on: ubuntu-latest
+#       steps:
+#         - name: Checkout code
+#           uses: actions/checkout@v2
+#         - name: Create Release
+#           id: create_release
+#           uses: actions/create-release@v1
+#           env:
+#             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+#           with:
+#             tag_name: ${{ github.ref }}
+#             release_name: Release ${{ github.ref }}
+#             body: |
+#               Changes in this Release
+#               - First Change
+#               - Second Change
+#             draft: false
+#             prerelease: false
+
+name: Create Release
 
 on:
-    push:
-      # Sequence of patterns matched against refs/tags
-      branches:
-        - "packageRelease"
-    #   tags:
-    #     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-    
-    
+  push:
+    tags:
+      - 'v*' # Trigger on version tags, like v1.0.0
+
 jobs:
-    build:
-      name: Create Release
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-        - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-          with:
-            tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }}
-            body: |
-              Changes in this Release
-              - First Change
-              - Second Change
-            draft: false
-            prerelease: false
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Here you can add steps to build and test your project as needed
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by GitHub Actions, no need to create it manually
+        with:
+          tag_name: ${{ github.ref }} # Uses the tag of the commit that triggered the workflow
+          release_name: Release ${{ github.ref }} # Name of the release
+          body: |
+            Describe your release here.
+          draft: false # Set to true to create a draft release
+          prerelease: false # Set to true for a prerelease version
