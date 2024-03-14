@@ -37,7 +37,6 @@ public class ViewFeed {
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("response" + response);
         Gson gson = new Gson();
         JsonArray jsonarr = gson.fromJson(response.body(), JsonArray.class);
 
