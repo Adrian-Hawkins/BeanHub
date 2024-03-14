@@ -14,12 +14,12 @@ jobs:
         steps:
             - name: Display committer info
               run: |
-                  echo "Committer's email: ${{ github.event.head_commit.author.email }}"
-                  echo "Committer's name: ${{ github.event.head_commit.author.name }}"
+                  echo "Committer's email: davidbu@bbd.co.za"
+                  echo "Committer's name: DavidBudnitsky-BBD"
             - name: Set Git config
               run: |
-                git config --global user.email "${{ github.event.head_commit.author.email }}"
-                git config --global user.name "${{ github.event.head_commit.author.name }}"
+                git config --global user.email davidbu@bbd.co.za"
+                git config --global user.name DavidBudnitsky-BBD"
             - name: Checkout code
               uses: actions/checkout@v2
             - name: Get PR number
