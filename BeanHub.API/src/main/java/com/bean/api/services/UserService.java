@@ -1,5 +1,6 @@
 package com.bean.api.services;
 
+import com.bean.api.entities.Recipe;
 import com.bean.api.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -39,6 +40,11 @@ public class UserService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Transactional(readOnly = false)
+    public User getUserById(Integer userId) {
+        return entityManager.find(User.class, userId);
     }
 
     @Transactional(readOnly = true)
