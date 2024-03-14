@@ -101,7 +101,7 @@ public class App {
 
             switch (userOption) {
                 case 1:
-                    // View personalised feed
+                    //View my explore page
 
                     break;
                 case 2:
@@ -121,7 +121,7 @@ public class App {
                     }
                     String filterChoice = scanner.nextLine();
 
-                    ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken()); // Make sure this
+                    ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken(),filterChoice); // Make sure this
                     exploreView.UserInteraction();                                                              // changes after auth is
                                                                                                 // sorted.
                     break;
