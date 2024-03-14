@@ -4,6 +4,8 @@
 package client;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import client.util.PostRecipe;
@@ -49,18 +51,18 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         // Log in here
-        String[] userOptions = {"Log in", "Exit"};
+        List<String> userOptions = Arrays.asList("Log in", "Exit");
         boolean hasLoggedIn = false;
         while (!hasLoggedIn) {
             System.out.println("Select what you want to do:");
-            for (int i =0;i<userOptions.length;i++){
-                System.out.println((i+1) + ": " + userOptions[i]);
+            for (int i = 0; i < userOptions.size(); i++) {
+                System.out.println((i + 1) + ": " + userOptions.get(i));
             }
             String temp = scanner.nextLine();
             int userOption = 0;
             try {
                 userOption = Integer.parseInt(temp);
-                if (userOption>userOptions.length){
+                if (userOption>userOptions.size()){
                     Integer.parseInt("q");
                 }
             } catch (NumberFormatException e) {
@@ -80,17 +82,19 @@ public class App {
             }
         }
 
-        userOptions = new String[] {"View your feed", "View your recipes", "View explore page", "Post a new recipe", "Exit"};
+        userOptions = Arrays.asList("View your feed", "View your recipes", "View explore page", "Post a new recipe", "Exit");
         while (true) {
+
             System.out.println("Select what you want to do:");
-            for (int i =0;i<userOptions.length;i++){
-                System.out.println((i+1) + ": " + userOptions[i]);
+            for (int i = 0; i < userOptions.size(); i++) {
+                System.out.println((i + 1) + ": " + userOptions.get(i));
             }
+
             String temp = scanner.nextLine();
             int userOption = 0;
             try {
                 userOption = Integer.parseInt(temp);
-                if (userOption>userOptions.length){
+                if (userOption>userOptions.size()){
                     Integer.parseInt("q");
                 }
             } catch (NumberFormatException e) {
