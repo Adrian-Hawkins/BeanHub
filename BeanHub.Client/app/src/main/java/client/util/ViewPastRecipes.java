@@ -95,7 +95,7 @@ public class ViewPastRecipes {
             }
 
             for (int i=0;i<userOptions.length;i++){
-                System.out.println(Colors.WHITE_BOLD + (highNumber + i + 1) + ": " + Colors.RESET + userOptions[i]);
+                System.out.println(Colors.WHITE_BOLD + (highNumber - lowNumber + i + 1) + ": " + Colors.RESET + userOptions[i]);
             }
 
             String temp = scanner.nextLine();
@@ -171,13 +171,13 @@ public class ViewPastRecipes {
                         return; // returns to the main page.
                 }
             } else {
-                if (userOption==highNumber+1){
+                if (userOption==highNumber-lowNumber+1){
                     if (pageNumber==1){
                         pageNumber = maxNumPages;
                     } else {
                         pageNumber--;
                     }
-                }else if (userOption==highNumber+2){
+                }else if (userOption==highNumber-lowNumber+2){
                     if (pageNumber==maxNumPages){
                         pageNumber = 1;
                     } else {
