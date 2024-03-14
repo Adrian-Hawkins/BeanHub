@@ -137,7 +137,19 @@ public class ViewPastRecipes {
                 switch (viewRecipeOption) {
                     case 1:
                         //Edit the recipe here
-                        break;
+                        Long recID = (long) userRecipes[userOption-1].getRecipeID();
+                        
+                        String newName = "";
+
+                        while (newName.length() < 1){
+                            Colors.printColor(Colors.WHITE_BOLD, "Enter a new recipe name: ");
+                            newName = scanner.nextLine();
+                        }
+
+                        EditRecipe editingRecipe = new EditRecipe();
+                        editingRecipe.edit(recID, newName, this.accessToken);
+                        Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe edited successfully!");
+                        return;
                     case 2:
                         // Delete the recipe if no ratings are there
                         boolean recipeDeleted = deleteRecipe(userRecipes[userOption-1], this.accessToken);
@@ -146,6 +158,7 @@ public class ViewPastRecipes {
                         } else {
                             Colors.printColor(Colors.RED_BACKGROUND_BRIGHT, "Recipe cannot be deleted!!!");
                         }
+                        return;
                     default:
                         return; // returns to the main page.
                 }

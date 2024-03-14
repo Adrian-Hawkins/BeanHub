@@ -17,11 +17,11 @@ public class Recipe{
     
     @Override
     public String toString() {
-        return Colors.WHITE_BOLD + recipeName + Colors.RESET +
-        "\nShort Description=" + recipeShortDescription +
-        "\nPrep Time="+ prepTime + " minutes." +
-        "\nCooking Time=" + cookingTime + "minutes." +
-        "\n" + Colors.WHITE_UNDERLINED + "Recipe Steps:" + Colors.RESET + recipeSteps;
+        return Colors.WHITE_BOLD + recipeName + Colors.RESET + "\n" + 
+               Colors.WHITE_UNDERLINED + "Short Description:\n" + recipeShortDescription + "\n" + 
+               Colors.WHITE_UNDERLINED + "Prep Time: \n"+ prepTime + " minutes." + "\n" + 
+               Colors.WHITE_UNDERLINED + "Cooking Time:\n" + cookingTime + " minutes." + "\n" + 
+               Colors.WHITE_UNDERLINED + "Recipe Steps:\n" + Colors.RESET + recipeSteps;
     }
 
 
