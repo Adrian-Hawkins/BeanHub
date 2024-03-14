@@ -34,7 +34,6 @@ public class Auth {
             Gson gson = new Gson();
             String jsonBody = gson.toJson(body);
             String url = BASE_URL + "/auth/login";
-            Colors.printColor(Colors.RED_BACKGROUND, url);
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

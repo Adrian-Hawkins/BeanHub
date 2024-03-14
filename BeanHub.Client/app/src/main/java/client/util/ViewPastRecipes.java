@@ -114,8 +114,8 @@ public class ViewPastRecipes {
                 //View that recipe
                 System.out.println(userRecipes[userOption-1]);
                 Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
-                String[] currOptions = {"Edit recipe", "Delete recipe", "Back to home"};
-                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.WHITE_BRIGHT};
+                String[] currOptions = {"Edit recipe", "Delete recipe", "Rate recipe", "Back to home"};
+                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.PURPLE, Colors.WHITE_BRIGHT};
                 
                 for (int i=0;i<currOptions.length;i++){
                     Colors.printColor(currColors[i], (i+1) + ": " + currOptions[i]);
@@ -137,7 +137,19 @@ public class ViewPastRecipes {
                 switch (viewRecipeOption) {
                     case 1:
                         //Edit the recipe here
-                        break;
+                        Long recID = (long) userRecipes[userOption-1].getRecipeID();
+                        
+                        String newName = "";
+
+                        while (newName.length() < 1){
+                            Colors.printColor(Colors.WHITE_BOLD, "Enter a new recipe name: ");
+                            newName = scanner.nextLine();
+                        }
+
+                        EditRecipe editingRecipe = new EditRecipe();
+                        editingRecipe.edit(recID, newName, this.accessToken);
+                        Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe edited successfully!");
+                        return;
                     case 2:
                         // Delete the recipe if no ratings are there
                         boolean recipeDeleted = deleteRecipe(userRecipes[userOption-1], this.accessToken);
@@ -146,6 +158,15 @@ public class ViewPastRecipes {
                         } else {
                             Colors.printColor(Colors.RED_BACKGROUND_BRIGHT, "Recipe cannot be deleted!!!");
                         }
+                        return;
+                    case 3:
+                        // rate the recipe here
+                        RateRecipe ratingRecipe = new RateRecipe();
+
+                        ratingRecipe.rate((long) userRecipes[userOption-1].getRecipeID(),
+                                            (long) this.userID,
+                                            this.accessToken);
+                        return;
                     default:
                         return; // returns to the main page.
                 }
