@@ -12,6 +12,10 @@ jobs:
         if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
+            - name: Display committer info
+              run: |
+                  echo "Committer's email: ${{ github.event.head_commit.author.email }}"
+                  echo "Committer's name: ${{ github.event.head_commit.author.name }}"
             - name: Set Git config
               run: |
                 git config --global user.email "${{ github.event.head_commit.author.email }}"
