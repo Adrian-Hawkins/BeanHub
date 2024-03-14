@@ -84,8 +84,7 @@ public class ViewFeed {
                     currJsonObject.get("prepTime").getAsInt(),
                     currJsonObject.get("cookingTime").getAsInt(),
                     currJsonObject.get("recipeSteps").getAsString(),
-                    // currJsonObject.get("dateAdded").getAsString(),
-                    "someDate",
+                    currJsonObject.get("dateAdded").getAsString(),
                     averageResponse.body());
 
         }
