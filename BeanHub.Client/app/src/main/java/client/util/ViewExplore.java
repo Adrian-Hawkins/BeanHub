@@ -87,17 +87,6 @@ public class ViewExplore {
 
     public void UserInteraction() throws IOException, InterruptedException {
         
-        // Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
-        // String[] filterOptions = { "Newest", "Oldest", "Highest Rated","Lowest Rated" };
-        // String[] filteroptionColors = { Colors.RED, Colors.GREEN, Colors.RED, Colors.GREEN};
-        // int filterHighNumber = filterOptionNumber * (pageSize);
-        // int filterLowNumber = (filterOptionNumber - 1) * (pageSize);
-
-        // for (int i = 0; i < filterOptions.length; i++) {
-        //     System.out.println(Colors.WHITE_BOLD + (i - filterLowNumber + 1) + ": " + Colors.RESET + filterOptions[i]);
-        // }
-        // String filterChoice = scanner.nextLine();
-        
         while (true) {
             ///NEW SCREEN
             Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select what you want to do.");
@@ -109,8 +98,6 @@ public class ViewExplore {
             if (highNumber > allRecipes.length) {
                 highNumber = allRecipes.length;
             }
-
-           
 
             for (int i = lowNumber; i < highNumber; i++) {
                 System.out.println(Colors.WHITE_BOLD + (i - lowNumber + 1) + ": " + Colors.RESET +
@@ -136,9 +123,9 @@ public class ViewExplore {
             if (userOption <= (highNumber - lowNumber)) {
                 // View that recipe
                 System.out.println(allRecipes[userOption - 1]);
-                Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
-                String[] currOptions = { "Edit recipe", "Delete recipe", "Back to home" };
-                String[] currColors = { Colors.GREEN_BRIGHT, Colors.RED, Colors.WHITE_BRIGHT };
+                Colors.printColor(Colors.WHITE_BOLD, "Go Back");
+                String[] currOptions = { "Back" };
+                String[] currColors = {Colors.RED};
 
                 for (int i = 0; i < currOptions.length; i++) {
                     Colors.printColor(currColors[i], (i + 1) + ": " + currOptions[i]);
@@ -156,14 +143,6 @@ public class ViewExplore {
                     Colors.printColor(Colors.RED, "Invalid input provided, returning home.");
                     return;
                 }
-
-                // switch (viewRecipeOption) {
-                // case 1:
-                // // Edit the recipe here
-                // break;
-                // default:
-                // return; // returns to the main page.
-                // }
             } else {
                 if (userOption == highNumber + 1) {
                     if (pageNumber == 1) {
