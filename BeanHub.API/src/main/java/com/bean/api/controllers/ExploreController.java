@@ -41,12 +41,4 @@ public class ExploreController {
         Map<Long, Double> averageRatings = recipeService.getAverageRatings(recipeIdsList);
         return averageRatings;
     }
-
-    // @GetMapping("/get/{id}")
-    // public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") Long id) {
-    // Recipe recipe = recipeService.getRecipeById(id);
-    // if(recipe != null)
-    // return new ResponseEntity<>(recipe, HttpStatus.OK);
-    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    // }
 }

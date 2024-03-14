@@ -95,7 +95,7 @@ public class ViewPastRecipes {
             }
 
             for (int i=0;i<userOptions.length;i++){
-                System.out.println(Colors.WHITE_BOLD + (highNumber + i + 1) + ": " + Colors.RESET + userOptions[i]);
+                System.out.println(Colors.WHITE_BOLD + (highNumber - lowNumber + i + 1) + ": " + Colors.RESET + userOptions[i]);
             }
 
             String temp = scanner.nextLine();
@@ -114,8 +114,8 @@ public class ViewPastRecipes {
                 //View that recipe
                 System.out.println(userRecipes[userOption-1]);
                 Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
-                String[] currOptions = {"Edit recipe", "Delete recipe", "Back to home"};
-                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.WHITE_BRIGHT};
+                String[] currOptions = {"Edit recipe", "Delete recipe", "Rate recipe", "Back to home"};
+                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.PURPLE, Colors.WHITE_BRIGHT};
                 
                 for (int i=0;i<currOptions.length;i++){
                     Colors.printColor(currColors[i], (i+1) + ": " + currOptions[i]);
@@ -159,17 +159,25 @@ public class ViewPastRecipes {
                             Colors.printColor(Colors.RED_BACKGROUND_BRIGHT, "Recipe cannot be deleted!!!");
                         }
                         return;
+                    case 3:
+                        // rate the recipe here
+                        RateRecipe ratingRecipe = new RateRecipe();
+
+                        ratingRecipe.rate((long) userRecipes[userOption-1].getRecipeID(),
+                                            (long) this.userID,
+                                            this.accessToken);
+                        return;
                     default:
                         return; // returns to the main page.
                 }
             } else {
-                if (userOption==highNumber+1){
+                if (userOption==highNumber-lowNumber+1){
                     if (pageNumber==1){
                         pageNumber = maxNumPages;
                     } else {
                         pageNumber--;
                     }
-                }else if (userOption==highNumber+2){
+                }else if (userOption==highNumber-lowNumber+2){
                     if (pageNumber==maxNumPages){
                         pageNumber = 1;
                     } else {

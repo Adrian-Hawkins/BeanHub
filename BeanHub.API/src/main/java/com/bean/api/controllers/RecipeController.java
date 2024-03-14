@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -83,5 +84,14 @@ public class RecipeController {
         r.setRecipeName(recipe.getRecipeName());
         recipeService.updateRecipe(r);
         return null;
+    }
+
+    @PostMapping("/rate/{recipeID}/{rating}/{userID}")
+    public String rateRecipe(@PathVariable("recipeID") Long recipeID,
+                            @PathVariable("rating") Long rating,
+                            @PathVariable("userID") Long userID) {
+        // See if the recipe has been rated already
+        var ans = recipeService.rateRecipe(recipeID, rating, userID);
+        return ans;
     }
 }
