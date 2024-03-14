@@ -18,8 +18,8 @@ jobs:
                   echo "Committer's name: DavidBudnitsky-BBD"
             - name: Set Git config
               run: |
-                git config --global user.email davidbu@bbd.co.za"
-                git config --global user.name DavidBudnitsky-BBD"
+                git config --global user.email "davidbu@bbd.co.za"
+                git config --global user.name "DavidBudnitsky-BBD"
             - name: Checkout code
               uses: actions/checkout@v2
             - name: Get PR number
