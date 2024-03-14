@@ -24,6 +24,7 @@ public class Auth {
 
     public Boolean loginFlow() {
         try {
+            System.out.print(Colors.RED);
             this.username = GetCode();
             Map<String, String> body = new HashMap<String, String>();
             if(this.username == null)
@@ -33,7 +34,6 @@ public class Auth {
             Gson gson = new Gson();
             String jsonBody = gson.toJson(body);
             String url = BASE_URL + "/auth/login";
-            Colors.printColor(Colors.RED_BACKGROUND, url);
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -45,6 +45,8 @@ public class Auth {
             return true;
         } catch (IOException | InterruptedException e) {
             return false;
+        } finally {
+            System.out.println(Colors.RESET);
         }
     }
     public String GetCode() throws IOException, InterruptedException {

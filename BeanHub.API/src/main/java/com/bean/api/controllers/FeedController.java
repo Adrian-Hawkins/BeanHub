@@ -23,6 +23,8 @@ public class FeedController {
 
     // @Autowired
     // private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     @GetMapping("/feed")
     public List<Recipe> getAllRecipeIngredients() {
