@@ -5,6 +5,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
@@ -64,6 +66,19 @@ public class ViewPastRecipes {
         userRecipes = new Recipe[numUserRecipes];
         for (int i=0;i<numUserRecipes;i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
+            JsonArray recipeIngredientsJson = currJsonObject.getAsJsonArray("recipeIngredients");
+
+            List<String> recipeIngredients = new ArrayList<String>();
+            for (int j=0;j<recipeIngredientsJson.size();j++){
+                JsonObject currIngredient = recipeIngredientsJson.get(j).getAsJsonObject();
+                String ingredientName = currIngredient.get("ingredient").getAsJsonObject().get("ingredientName").getAsString();
+                Long quantity = currIngredient.get("quantity").getAsLong();
+                String unit = currIngredient.get("unit").getAsJsonObject().get("unitName").getAsString();
+
+                String temp = ingredientName + ": " + quantity + " " + unit;
+                recipeIngredients.add(temp);
+            }
+
             userRecipes[i] = new Recipe(
             currJsonObject.get("recipeId").getAsInt(),
             currJsonObject.get("recipeName").getAsString(),
@@ -71,6 +86,8 @@ public class ViewPastRecipes {
             currJsonObject.get("prepTime").getAsInt(),
             currJsonObject.get("cookingTime").getAsInt(),
             currJsonObject.get("recipeSteps").getAsString());
+
+            userRecipes[i].setRecipeIngredients(recipeIngredients);
         }
     }
 
