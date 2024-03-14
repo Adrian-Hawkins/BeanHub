@@ -1,6 +1,10 @@
 # Java levelup - Beanhub
 Beanhub is a platform where bean enthusiasts can share bean-related recipes with one-another.
 
+## AWS Setup
+AWS and our github workflows are set up in the following way:
+![AWS Setup goes here](AWS_Setup.jpeg)
+
 ## To run the API
 ```cmd
 cd api
