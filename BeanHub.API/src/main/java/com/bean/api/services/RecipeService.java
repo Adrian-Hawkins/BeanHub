@@ -69,15 +69,15 @@ public class RecipeService {
         Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
         switch (sort) {
-            case "1": //newest
+            case "1": // newest
                 return getSortedRecipesByDateAdded(recipeIds,
                         Comparator.nullsLast(Comparator.reverseOrder()));
-            case "2": //oldest
+            case "2": // oldest
                 return getSortedRecipesByDateAdded(recipeIds,
                         Comparator.nullsLast(Comparator.naturalOrder()));
-            case "3": //highest rated
+            case "3": // highest rated
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
-            case "4": //lowest rated
+            case "4": // lowest rated
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
             default:
                 return getSortedRecipesByDateAdded(recipeIds,
@@ -85,13 +85,15 @@ public class RecipeService {
         }
     }
 
-    private Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
-        String ratingJpql = "SELECT AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId = :recipeId";
+    public Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
+        String ratingJpql = "SELECT r.recipe.recipeId, AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId IN :recipeIds GROUP BY r.recipe.recipeId";
+        TypedQuery<Object[]> avgQuery = entityManager.createQuery(ratingJpql, Object[].class);
+        avgQuery.setParameter("recipeIds", recipeIds);
+        List<Object[]> results = avgQuery.getResultList();
         Map<Long, Double> averageRatings = new HashMap<>();
-        for (Long recipeId : recipeIds) {
-            TypedQuery<Double> avgQuery = entityManager.createQuery(ratingJpql, Double.class);
-            avgQuery.setParameter("recipeId", recipeId);
-            Double avgRating = avgQuery.getSingleResult();
+        for (Object[] result : results) {
+            Long recipeId = (Long) result[0];
+            Double avgRating = (Double) result[1];
             averageRatings.put(recipeId, avgRating != null ? avgRating : 0.0);
         }
         return averageRatings;
@@ -114,10 +116,10 @@ public class RecipeService {
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
             String sort) {
         switch (sort) {
-            case "lowest rated":
+            case "4":
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
                 break;
-            case "highest rated":
+            case "3":
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
                 break;
             default:
@@ -136,6 +138,7 @@ public class RecipeService {
         }
         return sortedRecipes;
     }
+
     @Transactional(readOnly = true)
     public List<Recipe> getAllRecipes() {
         String jpql = "SELECT r FROM Recipe r";

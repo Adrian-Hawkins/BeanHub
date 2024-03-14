@@ -6,18 +6,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
-
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewExplore {
     // Show all recipes by filter/sort in pages of 5 recipes.
     // pageSize * (pageNumber-1) ROWS FETCH NEXT pageSize ROWS ONLY;
     private final int pageSize = 5;
     private int pageNumber = 1;
-    private int filterOptionNumber=1;
+    private int filterOptionNumber = 1;
     private final int maxNumPages;
     private final String mainURL = System.getenv("BEANHUB_API_URL");
     private FeedExplore[] allRecipes;
@@ -28,7 +30,7 @@ public class ViewExplore {
         this.accessToken = accessToken;
 
         scanner = new Scanner(System.in);
-        String url = mainURL + "/api/explore/getallrecipes/"+filterChoice;
+        String url = mainURL + "/api/explore/getallrecipes/" + filterChoice;
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -55,22 +57,38 @@ public class ViewExplore {
             this.maxNumPages = temp;
         }
 
+        List<Long> recipeIds = new ArrayList<>();
+        for (int i = 0; i < numRecipes; i++) {
+            JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
+            recipeIds.add(currJsonObject.get("recipeId").getAsLong());
+        }
+
+        String recipeIdsString = recipeIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        recipeIdsString = recipeIdsString.replaceAll("\\[|\\]", "");
+        String averageUrl = mainURL + "/api/explore/getaverageratings/" + recipeIdsString;
+
+        // String averageUrl = mainURL + "/api/explore/getaverageratings/" + recipeIds;
+        HttpClient averageClient = HttpClient.newHttpClient();
+        HttpRequest averageRequest = HttpRequest.newBuilder()
+                .uri(URI.create(averageUrl))
+                .header("Authorization", "Bearer " + this.accessToken)
+                .GET()
+                .build();
+        HttpResponse<String> averageResponse = averageClient.send(averageRequest,
+                HttpResponse.BodyHandlers.ofString());
+        System.out.println("averageResponse " + averageResponse.body());
+        // Gson averageGson = new Gson();
+        // JsonArray averageJsonarr = averageGson.fromJson(averageResponse.body(),
+        // JsonArray.class);
+
         int recipeId;
         allRecipes = new FeedExplore[numRecipes];
         for (int i = 0; i < numRecipes; i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
-            recipeId = currJsonObject.get("recipeId").getAsInt();
-
-            String averageUrl = mainURL + "/api/explore/getaveragerating/" + recipeId;
-            HttpClient averageClient = HttpClient.newHttpClient();
-            HttpRequest averageRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(averageUrl))
-                    .header("Authorization", "Bearer " + this.accessToken)
-                    .GET()
-                    .build();
-            HttpResponse<String> averageResponse = averageClient.send(averageRequest,
-                    HttpResponse.BodyHandlers.ofString());
-
+            // int recipeNo = currJsonObject.get("recipeId").getAsInt();
+            // String recipeString = currJsonObject.get("recipeId").getAsString();
             allRecipes[i] = new FeedExplore(
                     currJsonObject.get("recipeId").getAsInt(),
                     currJsonObject.get("recipeName").getAsString(),
@@ -78,20 +96,18 @@ public class ViewExplore {
                     currJsonObject.get("prepTime").getAsInt(),
                     currJsonObject.get("cookingTime").getAsInt(),
                     currJsonObject.get("recipeSteps").getAsString(),
-                    // currJsonObject.get("dateAdded").getAsString(),
-                    "someDate",
-                    averageResponse.body());
-
+                    currJsonObject.get("dateAdded").getAsString(),
+                    "2.5");
+            // desiredJsonObject.get("1").getAsString());
         }
     }
 
     public void UserInteraction() throws IOException, InterruptedException {
-        
+
         while (true) {
-            ///NEW SCREEN
+            /// NEW SCREEN
             Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select what you want to do.");
             String[] userOptions = { "Previous page", "Next page", "Back to home" };
-            String[] optionColors = { Colors.BLUE, Colors.GREEN, Colors.YELLOW };
 
             int lowNumber = (pageNumber - 1) * (pageSize);
             int highNumber = pageNumber * (pageSize);
@@ -125,7 +141,7 @@ public class ViewExplore {
                 System.out.println(allRecipes[userOption - 1]);
                 Colors.printColor(Colors.WHITE_BOLD, "Go Back");
                 String[] currOptions = { "Back" };
-                String[] currColors = {Colors.RED};
+                String[] currColors = { Colors.RED };
 
                 for (int i = 0; i < currOptions.length; i++) {
                     Colors.printColor(currColors[i], (i + 1) + ": " + currOptions[i]);
@@ -163,5 +179,4 @@ public class ViewExplore {
         }
     }
 
-  
 }
