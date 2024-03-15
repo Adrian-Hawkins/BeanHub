@@ -61,6 +61,9 @@ public class RecipeService {
         return query.getResultList();
     }
 
+    // @Kay
+    // Switch -> enum
+    // requestparam-why?
     public List<Recipe> getSortedExplore(@RequestParam(value = "sort", defaultValue = "1") String sort) {
         String jpql = "SELECT r.recipeId FROM Recipe r";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
@@ -85,6 +88,9 @@ public class RecipeService {
         }
     }
 
+    // @Kay
+    // What is the return type of the query, Object is not good enough. I want to know what to expect.
+    // What is the type of result?
     public Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
         String ratingJpql = "SELECT r.recipe.recipeId, AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId IN :recipeIds GROUP BY r.recipe.recipeId";
         TypedQuery<Object[]> avgQuery = entityManager.createQuery(ratingJpql, Object[].class);
@@ -99,20 +105,31 @@ public class RecipeService {
         return averageRatings;
     }
 
+    // @Kay and @Moshe - I (David) have fixed this function to make it okay.
+    // I am still not happy with what's happening at the return.
+    // Moshe has a similar function to fix, so this one belongs to Kay.
     private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, Comparator<Long> comparator) {
+        // JPQL query that returns all recipes with the recipe IDs in the provided list.
         String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
         TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
+        // Adds a parameter to the query. Sets the parameter to the list passed in to the function.
         recipeQuery.setParameter("recipeIds", recipeIds);
+        // Run the query 
         List<Recipe> recipes = recipeQuery.getResultList();
-        recipes.sort((r1, r2) -> {
-            LocalDateTime date1 = r1.getDateAdded();
-            LocalDateTime date2 = r2.getDateAdded();
+        // Sorts the results by their dates.
+        // Ascending or descending is chosen based on the comparator parameter passed in.
+        recipes.sort((recipe1, recipe2) -> { // r1 is now recipe1 and r2 is now recipe2...
+            // date1 is the date that recipe1 was added, same for 2.
+            LocalDateTime date1 = recipe1.getDateAdded();
+            LocalDateTime date2 = recipe2.getDateAdded();
+            // IDK if setting it to null if it is null here is a good idea. Maybe give it a default value earlier instead.
             return comparator.compare(date1 != null ? date1.toEpochSecond(ZoneOffset.UTC) : null,
                     date2 != null ? date2.toEpochSecond(ZoneOffset.UTC) : null);
         });
         return recipes;
     }
-
+    
+    // @Kay - switch->enum
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
             String sort) {
         switch (sort) {

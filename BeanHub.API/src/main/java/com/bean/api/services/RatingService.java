@@ -46,6 +46,8 @@ public class RatingService {
         return entityManager.find(Rating.class, ratingId);
     }
 
+    // @Moshe
+    // Replace switch with enum
     public List<Recipe> getSortedFeed(int userId, String sort) {
 
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
@@ -81,6 +83,9 @@ public class RatingService {
         return averageRatings;
     }
 
+    // @Moshe
+    // r1/r2
+    // whats that return statement doing exactly?
     private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, Comparator<Long> comparator) {
         String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
         TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
@@ -95,6 +100,9 @@ public class RatingService {
         return recipes;
     }
 
+
+    // @Moshe
+    // Switch -> enum
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
             String sort) {
         switch (sort) {
