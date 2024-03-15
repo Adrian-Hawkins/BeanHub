@@ -127,7 +127,7 @@ public class App {
                 case 3:
                     // View my explore page
                     Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
-                    String[] filterOptions = { "Newest", "Oldest", "Highest Rated", "Lowest Rated" };
+                    String[] filterOptions = { "Newest", "Oldest" };
 
                     for (int i = 0; i < filterOptions.length; i++) {
                         System.out.println(Colors.WHITE_BOLD + (i + 1) + ": " + Colors.RESET + filterOptions[i]);

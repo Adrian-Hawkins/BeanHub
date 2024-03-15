@@ -98,10 +98,10 @@ public class RatingService {
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
             String sort) {
         switch (sort) {
-            case "lowest rated":
+            case "4":
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
                 break;
-            case "highest rated":
+            case "3":
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
                 break;
             default:
