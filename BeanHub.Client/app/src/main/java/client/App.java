@@ -21,24 +21,14 @@ import org.apache.http.util.EntityUtils;
 
 public class App {
 
-    // private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
-    // private static final Auth Authentication = new Auth(System.getenv("BEANHUB_CLIENT_ID"));
     private static Auth Authentication;
-    // private static final PostRecipe postRecipe = new PostRecipe();
     private static PostRecipe postRecipe;
 
     private static boolean hasLoggedIn = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Properties val = PropertiesLoader.loadProperties();
-
-        // System.setProperty("BEANHUB_API_URL", val.getProperty("endpoint"));
-        // System.setProperty("BEANHUB_CLIENT_ID", val.getProperty("client_id"));
-        System.out.println(System.getenv("BEANHUB_API_URL"));
-        System.out.println();
         Authentication = new Auth(val.getProperty("client_id"), "http://18.203.89.61");
-        // JSONParser j = new JSONParser();
-        // System.out.println(j.getItem(val.toString(), "clientId"));
 
         Colors.printColor(Colors.GREEN, "\r\n" + //
                 " __          __         _                                       _           \r\n" + //

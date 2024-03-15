@@ -19,6 +19,17 @@ cd BeanHub.Client
 ./gradlew --console=plain app:run   
 ```
 
+## To create a msi file for the client
+```cmd
+cd BeanHub.Client
+./gradlew shadowJar
+jpackage --input target --name beanss --main-jar app-all.jar --type msi --win-console `
+         --win-dir-chooser `
+         --win-menu `
+         --win-shortcut `
+         --win-shortcut-prompt
+```
+
 If you get a complaint about a client ID, you must set the client ID. You may also need to set the API url.
 To make this a bit easier, add a `setenv.ps1` file in the `BeanHub.Client` directory, with this content:
 ```
