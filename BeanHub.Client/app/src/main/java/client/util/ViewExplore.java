@@ -69,7 +69,6 @@ public class ViewExplore {
         recipeIdsString = recipeIdsString.replaceAll("\\[|\\]", "");
         String averageUrl = mainURL + "/api/explore/getaverageratings/" + recipeIdsString;
 
-        // String averageUrl = mainURL + "/api/explore/getaverageratings/" + recipeIds;
         HttpClient averageClient = HttpClient.newHttpClient();
         HttpRequest averageRequest = HttpRequest.newBuilder()
                 .uri(URI.create(averageUrl))
@@ -78,17 +77,11 @@ public class ViewExplore {
                 .build();
         HttpResponse<String> averageResponse = averageClient.send(averageRequest,
                 HttpResponse.BodyHandlers.ofString());
-        System.out.println("averageResponse " + averageResponse.body());
-        // Gson averageGson = new Gson();
-        // JsonArray averageJsonarr = averageGson.fromJson(averageResponse.body(),
-        // JsonArray.class);
 
         int recipeId;
         allRecipes = new FeedExplore[numRecipes];
         for (int i = 0; i < numRecipes; i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
-            // int recipeNo = currJsonObject.get("recipeId").getAsInt();
-            // String recipeString = currJsonObject.get("recipeId").getAsString();
             allRecipes[i] = new FeedExplore(
                     currJsonObject.get("recipeId").getAsInt(),
                     currJsonObject.get("recipeName").getAsString(),
@@ -97,8 +90,7 @@ public class ViewExplore {
                     currJsonObject.get("cookingTime").getAsInt(),
                     currJsonObject.get("recipeSteps").getAsString(),
                     currJsonObject.get("dateAdded").getAsString(),
-                    "2.5");
-            // desiredJsonObject.get("1").getAsString());
+                    "0.0");
         }
     }
 
