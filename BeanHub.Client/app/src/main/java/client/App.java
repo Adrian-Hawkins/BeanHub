@@ -6,13 +6,12 @@ package client;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
-import client.util.PostRecipe;
-import client.util.ViewExplore;
-import client.util.ViewFeed;
-import client.util.ViewPastRecipes;
-import client.util.Colors;
+import client.helpers.JSONParser;
+import client.util.*;
+import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -20,17 +19,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import client.util.Auth;
-
 public class App {
 
-    private static final String BASE_URL = System.getenv("BEANHUB_API_URL");
-    private static final Auth Authentication = new Auth(System.getenv("BEANHUB_CLIENT_ID"));
-    private static final PostRecipe postRecipe = new PostRecipe();
+    private static Auth Authentication;
+    private static PostRecipe postRecipe;
 
     private static boolean hasLoggedIn = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        Properties val = PropertiesLoader.loadProperties();
+        Authentication = new Auth(val.getProperty("client_id"), "http://18.203.89.61");
+
         Colors.printColor(Colors.GREEN, "\r\n" + //
                 " __          __         _                                       _           \r\n" + //
                 " \\ \\        / /        | |                                     | |          \r\n" + //

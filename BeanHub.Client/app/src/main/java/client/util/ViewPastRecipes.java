@@ -162,7 +162,7 @@ public class ViewPastRecipes {
                             newName = scanner.nextLine();
                         }
 
-                        EditRecipe editingRecipe = new EditRecipe();
+                        EditRecipe editingRecipe = new EditRecipe("http://18.203.89.61");
                         editingRecipe.edit(recID, newName, this.accessToken);
                         Colors.printColor(Colors.GREEN_BOLD_BRIGHT, "Recipe edited successfully!");
                         return;

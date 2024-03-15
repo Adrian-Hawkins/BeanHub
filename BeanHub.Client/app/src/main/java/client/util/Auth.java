@@ -13,12 +13,13 @@ import java.util.Map;
 public class Auth {
     private String ClientId;
 
-    private static final String BASE_URL = System.getenv("BEANHUB_API_URL");;
+    private static String BASE_URL;
 
     private String username;
     private static String accessToken;
 
-    public Auth(String ClientId) {
+    public Auth(String ClientId, String burl) {
+        BASE_URL = burl;
         this.ClientId = ClientId;
     }
 
