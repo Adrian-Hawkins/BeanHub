@@ -125,6 +125,8 @@ public class ViewPastRecipes {
 
             if (userOption<=(highNumber-lowNumber)){
                 System.out.println(userRecipes.get(userOption - 1));
+                //View that recipe
+                System.out.println(userRecipes.get(highNumber - lowNumber + userOption - 1));
                 Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
                 String[] currOptions = {"Edit recipe", "Delete recipe", "Rate recipe", "Back to home"};
                 String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.PURPLE, Colors.WHITE_BRIGHT};
