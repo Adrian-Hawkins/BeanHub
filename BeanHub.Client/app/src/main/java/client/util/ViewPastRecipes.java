@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,6 +62,19 @@ public class ViewPastRecipes {
 
         for (int i=0;i<numUserRecipes;i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
+            JsonArray recipeIngredientsJson = currJsonObject.getAsJsonArray("recipeIngredients");
+
+            List<String> recipeIngredients = new ArrayList<String>();
+            for (int j=0;j<recipeIngredientsJson.size();j++){
+                JsonObject currIngredient = recipeIngredientsJson.get(j).getAsJsonObject();
+                String ingredientName = currIngredient.get("ingredient").getAsJsonObject().get("ingredientName").getAsString();
+                Long quantity = currIngredient.get("quantity").getAsLong();
+                String unit = currIngredient.get("unit").getAsJsonObject().get("unitName").getAsString();
+
+                String temp = ingredientName + ": " + quantity + " " + unit;
+                recipeIngredients.add(temp);
+            }
+
             userRecipes.add(new Recipe(
                     currJsonObject.get("recipeId").getAsInt(),
                     currJsonObject.get("recipeName").getAsString(),
@@ -68,6 +82,8 @@ public class ViewPastRecipes {
                     currJsonObject.get("prepTime").getAsInt(),
                     currJsonObject.get("cookingTime").getAsInt(),
                     currJsonObject.get("recipeSteps").getAsString()));
+
+            userRecipes.get(i).setRecipeIngredients(recipeIngredients);
         }
     }
 
@@ -92,7 +108,7 @@ public class ViewPastRecipes {
             }
 
             for (int i=0;i<userOptions.length;i++){
-                System.out.println(Colors.WHITE_BOLD + (highNumber + i + 1) + ": " + Colors.RESET + userOptions[i]);
+                System.out.println(Colors.WHITE_BOLD + (highNumber - lowNumber + i + 1) + ": " + Colors.RESET + userOptions[i]);
             }
 
             String temp = scanner.nextLine();
@@ -110,8 +126,8 @@ public class ViewPastRecipes {
             if (userOption<=(highNumber-lowNumber)){
                 System.out.println(userRecipes.get(userOption - 1));
                 Colors.printColor(Colors.WHITE_BOLD, "Select what you want to do with this recipe:");
-                String[] currOptions = {"Edit recipe", "Delete recipe", "Back to home"};
-                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.WHITE_BRIGHT};
+                String[] currOptions = {"Edit recipe", "Delete recipe", "Rate recipe", "Back to home"};
+                String[] currColors = {Colors.GREEN_BRIGHT, Colors.RED, Colors.PURPLE, Colors.WHITE_BRIGHT};
                 
                 for (int i=0;i<currOptions.length;i++){
                     Colors.printColor(currColors[i], (i+1) + ": " + currOptions[i]);
@@ -155,17 +171,25 @@ public class ViewPastRecipes {
                             Colors.printColor(Colors.RED_BACKGROUND_BRIGHT, "Recipe cannot be deleted!!!");
                         }
                         return;
+                    case 3:
+                        // rate the recipe here
+                        RateRecipe ratingRecipe = new RateRecipe();
+
+                        ratingRecipe.rate((long) userRecipes.get(userOption - 1).getRecipeID(),
+                                            (long) this.userID,
+                                            this.accessToken);
+                        return;
                     default:
                         return; // returns to the main page.
                 }
             } else {
-                if (userOption==highNumber+1){
+                if (userOption==highNumber-lowNumber+1){
                     if (pageNumber==1){
                         pageNumber = maxNumPages;
                     } else {
                         pageNumber--;
                     }
-                }else if (userOption==highNumber+2){
+                }else if (userOption==highNumber-lowNumber+2){
                     if (pageNumber==maxNumPages){
                         pageNumber = 1;
                     } else {

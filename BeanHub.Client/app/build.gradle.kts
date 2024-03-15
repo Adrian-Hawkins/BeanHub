@@ -8,6 +8,7 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
 
@@ -28,6 +29,18 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass.set("client.App")
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "client.App"
+    }
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = "client.App"
+    }
 }
 
 tasks.named<Test>("test") {

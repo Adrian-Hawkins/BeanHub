@@ -1,5 +1,8 @@
 package client.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Recipe{
     private int recipeID;
 
@@ -13,15 +16,34 @@ public class Recipe{
     private Integer prepTime;
     private Integer cookingTime;
     private String recipeSteps;
+    private List<String> recipeIngredients;
 
     
+    public void setRecipeIngredients(List<String> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
+    }
+
+
+
+    public List<String> getRecipeIngredients() {
+        return recipeIngredients;
+    }
+
+
+
     @Override
     public String toString() {
+        String ingredientsList = "";
+        for (int i=0;i<this.recipeIngredients.size();i++){
+            ingredientsList = ingredientsList + "- " + this.recipeIngredients.get(i) + "\n";
+        }
+
         return Colors.WHITE_BOLD + recipeName + Colors.RESET + "\n" + 
-               Colors.WHITE_UNDERLINED + "Short Description:\n" + recipeShortDescription + "\n" + 
-               Colors.WHITE_UNDERLINED + "Prep Time: \n"+ prepTime + " minutes." + "\n" + 
-               Colors.WHITE_UNDERLINED + "Cooking Time:\n" + cookingTime + " minutes." + "\n" + 
-               Colors.WHITE_UNDERLINED + "Recipe Steps:\n" + Colors.RESET + recipeSteps;
+               Colors.WHITE_UNDERLINED + "Short Description:\n" + Colors.RESET + recipeShortDescription + "\n" + 
+               Colors.WHITE_UNDERLINED + "Prep Time: \n"+ Colors.RESET + prepTime + " minutes." + "\n" + 
+               Colors.WHITE_UNDERLINED + "Cooking Time:\n" + Colors.RESET + cookingTime + " minutes." + "\n" + 
+               Colors.WHITE_UNDERLINED + "Recipe Steps:\n" + Colors.RESET + recipeSteps + "\n" + 
+               Colors.WHITE_UNDERLINED + "Ingredients: \n" + Colors.RESET + ingredientsList;
     }
 
 
@@ -58,5 +80,6 @@ public class Recipe{
         this.prepTime = prepTime;
         this.cookingTime = cookingTime;
         this.recipeSteps = recipeSteps;
+        this.recipeIngredients = new ArrayList<String>();
     }
 }
