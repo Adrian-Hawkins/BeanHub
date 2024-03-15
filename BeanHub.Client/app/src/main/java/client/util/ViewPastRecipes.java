@@ -60,6 +60,8 @@ public class ViewPastRecipes {
         .getAsJsonObject().get("userId").getAsInt();
         this.userID = uID;
 
+        this.userRecipes = new ArrayList<Recipe>();
+
         for (int i=0;i<numUserRecipes;i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
             JsonArray recipeIngredientsJson = currJsonObject.getAsJsonArray("recipeIngredients");
