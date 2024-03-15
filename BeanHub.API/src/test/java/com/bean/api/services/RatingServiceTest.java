@@ -77,28 +77,6 @@ class RatingServiceTest {
         verify(entityManager, times(1)).remove(rating);
     }
 
-    // @Test
-    // void getRatingById() {
-    //     Integer ratingId = 1;
-    //     Rating rating = new Rating();
-    //     rating.setRatingId(ratingId);
-    //     rating.setUser(new User());
-    //     rating.setRecipe(new Recipe());
-    //     rating.setRatingValue(4);
-    //     rating.setRatingDateTime(LocalDateTime.now());
-
-    //     when(entityManager.find(Rating.class, ratingId)).thenReturn(rating);
-
-    //     Rating result = ratingService.getRatingById(Long.valueOf(ratingId));
-
-    //     assertNotNull(result);
-    //     assertEquals(rating.getRatingId(), result.getRatingId());
-    //     assertNotNull(result.getUser());
-    //     assertNotNull(result.getRecipe());
-    //     assertEquals(rating.getRatingValue(), result.getRatingValue());
-    //     assertEquals(rating.getRatingDateTime(), result.getRatingDateTime());
-    // }
-
     @Test
     void getAllRatings() {
         Rating rating1 = new Rating();
