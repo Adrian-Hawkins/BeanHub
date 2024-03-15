@@ -12,7 +12,11 @@ import java.util.*;
 
 public class EditRecipe {
 
-    private final String BASE_URL = System.getenv("BEANHUB_API_URL");
+    private static String BASE_URL;
+
+    public EditRecipe(String burl) {
+        BASE_URL = burl;
+    }
 
     public void edit(Long id, String newName, String accessToken) throws IOException, InterruptedException {
         Map<String, Object> requestBody = new HashMap<>();
