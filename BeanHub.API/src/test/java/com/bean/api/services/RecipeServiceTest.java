@@ -81,32 +81,6 @@ class RecipeServiceTest {
         verify(entityManager, times(1)).remove(recipe);
     }
 
-    // @Test
-    // void getRecipeById() {
-    //     Integer recipeId = 1;
-    //     Recipe recipe = new Recipe();
-    //     recipe.setRecipeId(recipeId);
-    //     recipe.setRecipeName("Grilled Salmon");
-    //     recipe.setRecipeShortDescription("Healthy and flavorful fish dish");
-    //     recipe.setPrepTime(10);
-    //     recipe.setCookingTime(15);
-    //     recipe.setRecipeSteps("1. Season salmon...");
-    //     recipe.setUser(new User());
-
-    //     when(entityManager.find(Recipe.class, recipeId)).thenReturn(recipe);
-
-    //     Recipe result = recipeService.getRecipeById(Long.valueOf(recipeId));
-
-    //     // assertNotNull(result);
-    //     // assertEquals(recipe.getRecipeId(), result.getRecipeId());
-    //     // assertEquals(recipe.getRecipeName(), result.getRecipeName());
-    //     // assertEquals(recipe.getRecipeShortDescription(), result.getRecipeShortDescription());
-    //     // assertEquals(recipe.getPrepTime(), result.getPrepTime());
-    //     // assertEquals(recipe.getCookingTime(), result.getCookingTime());
-    //     // assertEquals(recipe.getRecipeSteps(), result.getRecipeSteps());
-    //     assertNotNull(result.getUser());
-    // }
-
     @Test
     void getAllRecipes() {
         Recipe recipe1 = new Recipe();

@@ -77,28 +77,6 @@ class RecipeIngredientsServiceTest {
         verify(entityManager, times(1)).remove(recipeIngredient);
     }
 
-    // @Test
-    // void getRecipeIngredientById() {
-    //     Integer recipeIngredientsId = 1;
-    //     RecipeIngredients recipeIngredient = new RecipeIngredients();
-    //     recipeIngredient.setRecipeIngredientsId(Long.valueOf(recipeIngredientsId));
-    //     recipeIngredient.setIngredient(new Ingredient());
-    //     recipeIngredient.setRecipe(new Recipe());
-    //     recipeIngredient.setQuantity(2);
-    //     recipeIngredient.setUnit(new Unit());
-
-    //     when(entityManager.find(RecipeIngredients.class, recipeIngredientsId)).thenReturn(recipeIngredient);
-
-    //     RecipeIngredients result = recipeIngredientsService.getRecipeIngredientById(Long.valueOf(recipeIngredientsId));
-
-    //     // assertNotNull(result);
-    //     // assertEquals(recipeIngredient.getRecipeIngredientsId(), result.getRecipeIngredientsId());
-    //     // assertNotNull(result.getIngredient());
-    //     // assertNotNull(result.getRecipe());
-    //     // assertEquals(recipeIngredient.getQuantity(), result.getQuantity());
-    //     // assertNotNull(result.getUnit());
-    // }
-
     @Test
     void getAllRecipeIngredients() {
         RecipeIngredients recipeIngredient1 = new RecipeIngredients();
