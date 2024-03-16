@@ -1,10 +1,10 @@
 package com.bean.api.requests;
 
-public class RecipeAverageRating {
+public class RecipeAverageRatingRequest {
     private Long recipeId;
     private Double averageRating;
 
-    public RecipeAverageRating(Long recipeId, Double averageRating) {
+    public RecipeAverageRatingRequest(Long recipeId, Double averageRating) {
         this.recipeId = recipeId;
         this.averageRating = averageRating;
     }

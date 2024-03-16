@@ -7,7 +7,7 @@ import com.bean.api.entities.User;
 
 import java.util.List;
 
-public class postRecipeRequest {
+public class PostRecipeRequest {
     private User user;
 
     private Recipe recipe;

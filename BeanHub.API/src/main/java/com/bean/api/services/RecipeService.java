@@ -5,7 +5,7 @@ import com.bean.api.entities.Recipe;
 import com.bean.api.entities.User;
 
 import com.bean.api.enums.SortOption;
-import com.bean.api.requests.RecipeAverageRating;
+import com.bean.api.requests.RecipeAverageRatingRequest;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -93,13 +93,13 @@ public class RecipeService {
     public Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
         String ratingJpql = "SELECT r.recipeId, AVG(rating.ratingValue) FROM Recipe r LEFT JOIN r.ratings rating WHERE r.recipeId IN :recipeIds GROUP BY r.recipeId";
     
-        TypedQuery<RecipeAverageRating> avgQuery = entityManager.createQuery(ratingJpql, RecipeAverageRating.class);
+        TypedQuery<RecipeAverageRatingRequest> avgQuery = entityManager.createQuery(ratingJpql, RecipeAverageRatingRequest.class);
         avgQuery.setParameter("recipeIds", recipeIds);
     
-        List<RecipeAverageRating> results = avgQuery.getResultList();
+        List<RecipeAverageRatingRequest> results = avgQuery.getResultList();
         Map<Long, Double> averageRatings = new HashMap<>();
     
-        for (RecipeAverageRating result : results) {
+        for (RecipeAverageRatingRequest result : results) {
             averageRatings.put(result.getRecipeId(), result.getAverageRating() != null ? result.getAverageRating() : 0.0);
         }
         return averageRatings;

@@ -1,7 +1,7 @@
 package com.bean.api.controllers;
 
 import com.bean.api.entities.*;
-import com.bean.api.requests.postRecipeRequest;
+import com.bean.api.requests.PostRecipeRequest;
 import com.bean.api.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class RecipeController {
     @Autowired
     private RecipeIngredientsService recipeIngredientsService;
     @PostMapping("/post")
-    public Map<Object, Object> postRecipe(@RequestBody postRecipeRequest req) {
+    public Map<Object, Object> postRecipe(@RequestBody PostRecipeRequest req) {
         Map<Object, Object> response = new HashMap<Object, Object>();
         try {
             User user = userService.getUserByUsername(req.getUser().getUsername());
