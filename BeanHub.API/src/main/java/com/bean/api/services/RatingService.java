@@ -75,16 +75,15 @@ public class RatingService {
 
         sortType sortEnum = getSort(filterValue);
         switch (sortEnum) {
-            case sortType.newest:
-                return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.reverseOrder()));
-            case sortType.oldest:
-                return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.naturalOrder()));
-            case sortType.highestRated:
+            case newest:
+            case oldest:
+                return getSortedRecipesByDateAdded(recipeIds, sortEnum);
+            case highestRated:
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortEnum);
-            case sortType.lowestRated:
+            case lowestRated:
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortEnum);
             default:
-                return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.reverseOrder()));
+                return getSortedRecipesByDateAdded(recipeIds, sortEnum);
         }
     }
 
@@ -100,30 +99,33 @@ public class RatingService {
         return averageRatings;
     }
 
-    // @Moshe
-    // r1/r2
-    // whats that return statement doing exactly?
-    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, Comparator<Long> comparator) {
-        String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
+    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, sortType sortEnum) {
+        String recipeJpql;
+        switch (sortEnum) {
+            case newest:
+                recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded DESC";
+                break;
+            case oldest:
+                recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded ASC";
+                break;
+            default:
+                recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded DESC";
+                break;
+        }
+
         TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
         recipeQuery.setParameter("recipeIds", recipeIds);
         List<Recipe> recipes = recipeQuery.getResultList();
-        recipes.sort((r1, r2) -> {
-            LocalDateTime date1 = r1.getDateAdded();
-            LocalDateTime date2 = r2.getDateAdded();
-            return comparator.compare(date1 != null ? date1.toEpochSecond(ZoneOffset.UTC) : null,
-                    date2 != null ? date2.toEpochSecond(ZoneOffset.UTC) : null);
-        });
         return recipes;
     }
 
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
             sortType sortEnum) {
         switch (sortEnum) {
-            case sortType.lowestRated:
+            case lowestRated:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
                 break;
-            case sortType.highestRated:
+            case highestRated:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
                 break;
             default:
