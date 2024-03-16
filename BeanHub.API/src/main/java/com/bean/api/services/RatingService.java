@@ -2,21 +2,17 @@ package com.bean.api.services;
 
 import com.bean.api.entities.Rating;
 import com.bean.api.entities.Recipe;
+import com.bean.api.enums.RatingEnums;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -46,26 +42,7 @@ public class RatingService {
         return entityManager.find(Rating.class, ratingId);
     }
 
-    enum sortType {
-        newest, oldest, highestRated, lowestRated
-    }
-
-    public sortType getSort(String sort) {
-        switch (sort) {
-            case "1":
-                return sortType.newest;
-            case "2":
-                return sortType.oldest;
-            case "3":
-                return sortType.highestRated;
-            case "4":
-                return sortType.lowestRated;
-            default:
-                return sortType.newest;
-        }
-    }
-
-    public List<Recipe> getSortedFeed(int userId, String filterValue) {
+    public List<Recipe> getSortedFeed(int userId, RatingEnums.SortType sortType) {
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
         query.setParameter("userId", userId);
@@ -73,17 +50,13 @@ public class RatingService {
 
         Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
-        sortType sortEnum = getSort(filterValue);
-        switch (sortEnum) {
-            case newest:
-            case oldest:
-                return getSortedRecipesByDateAdded(recipeIds, sortEnum);
-            case highestRated:
-                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortEnum);
-            case lowestRated:
-                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortEnum);
+        switch (sortType) {
+            case HIGHESTRATED:
+                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortType);
+            case LOWESTRATED:
+                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortType);
             default:
-                return getSortedRecipesByDateAdded(recipeIds, sortEnum);
+                return getSortedRecipesByDateAdded(recipeIds, sortType);
         }
     }
 
@@ -99,13 +72,13 @@ public class RatingService {
         return averageRatings;
     }
 
-    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, sortType sortEnum) {
+    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, RatingEnums.SortType sortType) {
         String recipeJpql;
-        switch (sortEnum) {
-            case newest:
+        switch (sortType) {
+            case NEWEST:
                 recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded DESC";
                 break;
-            case oldest:
+            case OLDEST:
                 recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded ASC";
                 break;
             default:
@@ -120,18 +93,17 @@ public class RatingService {
     }
 
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
-            sortType sortEnum) {
+            RatingEnums.SortType sortEnum) {
         switch (sortEnum) {
-            case lowestRated:
+            case LOWESTRATED:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
                 break;
-            case highestRated:
+            case HIGHESTRATED:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
                 break;
             default:
                 break;
         }
-        // Fetch all recipes from the database
         List<Recipe> allRecipes = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class).getResultList();
         Map<Long, Recipe> recipeMap = allRecipes.stream()
                 .collect(Collectors.toMap(Recipe::getRecipeId, Function.identity()));
