@@ -46,10 +46,26 @@ public class RatingService {
         return entityManager.find(Rating.class, ratingId);
     }
 
-    // @Moshe
-    // Replace switch with enum
-    public List<Recipe> getSortedFeed(int userId, String sort) {
+    enum sortType {
+        newest, oldest, highestRated, lowestRated
+    }
 
+    public sortType getSort(String sort) {
+        switch (sort) {
+            case "1":
+                return sortType.newest;
+            case "2":
+                return sortType.oldest;
+            case "3":
+                return sortType.highestRated;
+            case "4":
+                return sortType.lowestRated;
+            default:
+                return sortType.newest;
+        }
+    }
+
+    public List<Recipe> getSortedFeed(int userId, String filterValue) {
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
         query.setParameter("userId", userId);
@@ -57,15 +73,16 @@ public class RatingService {
 
         Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
-        switch (sort) {
-            case "1":
+        sortType sortEnum = getSort(filterValue);
+        switch (sortEnum) {
+            case sortType.newest:
                 return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.reverseOrder()));
-            case "2":
+            case sortType.oldest:
                 return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.naturalOrder()));
-            case "3":
-                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
-            case "4":
-                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
+            case sortType.highestRated:
+                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortEnum);
+            case sortType.lowestRated:
+                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortEnum);
             default:
                 return getSortedRecipesByDateAdded(recipeIds, Comparator.nullsLast(Comparator.reverseOrder()));
         }
@@ -100,16 +117,13 @@ public class RatingService {
         return recipes;
     }
 
-
-    // @Moshe
-    // Switch -> enum
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
-            String sort) {
-        switch (sort) {
-            case "4":
+            sortType sortEnum) {
+        switch (sortEnum) {
+            case sortType.lowestRated:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
                 break;
-            case "3":
+            case sortType.highestRated:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
                 break;
             default:
