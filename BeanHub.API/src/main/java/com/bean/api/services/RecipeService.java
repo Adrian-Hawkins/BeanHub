@@ -4,6 +4,7 @@ import com.bean.api.entities.Rating;
 import com.bean.api.entities.Recipe;
 import com.bean.api.entities.User;
 
+import com.bean.api.enums.SortOption;
 import com.bean.api.util.RecipeAverageRating;
 
 import jakarta.persistence.EntityManager;
@@ -60,13 +61,6 @@ public class RecipeService {
         TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
         query.setParameter("username", username);
         return query.getResultList();
-    }
-    
-    enum SortOption {
-        NEWEST,
-        OLDEST,
-        HIGHEST,
-        LOWEST
     }
 
     // @Kay
