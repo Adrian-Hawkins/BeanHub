@@ -58,7 +58,7 @@ public class ViewExplore {
             this.maxNumPages = temp;
         }
 
-        List<Long> recipeIds = new ArrayList<>();
+        List<Integer> recipeIds = new ArrayList<>();
         for (int i = 0; i < numRecipes; i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
             recipeIds.add(currJsonObject.get("recipeId").getAsInt());
