@@ -5,7 +5,7 @@ import com.bean.api.entities.Recipe;
 import com.bean.api.entities.User;
 
 import com.bean.api.enums.SortOption;
-import com.bean.api.util.RecipeAverageRating;
+import com.bean.api.requests.RecipeAverageRating;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -124,11 +124,7 @@ public class RecipeService {
     //Resolved
     @Transactional(readOnly = true)
     public List<Recipe> getSortedRecipesHighest() {
-        String jpql = "SELECT r " +
-                      "FROM Recipe r " +
-                      "LEFT JOIN r.ratings rt " +
-                      "GROUP BY r " +
-                      "ORDER BY AVG(rt.ratingValue) DESC";
+        String jpql = "SELECT r FROM Recipe r LEFT JOIN r.ratings rt GROUP BY r ORDER BY AVG(rt.ratingValue) DESC";
     
         TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
         return query.getResultList();
@@ -137,11 +133,7 @@ public class RecipeService {
     //Resolved
     @Transactional(readOnly = true)
     public List<Recipe> getSortedRecipesLowest() {
-        String jpql = "SELECT r " +
-                      "FROM Recipe r " +
-                      "LEFT JOIN r.ratings rt " +
-                      "GROUP BY r " +
-                      "ORDER BY AVG(rt.ratingValue) ASC";
+        String jpql = "SELECT r FROM Recipe r LEFT JOIN r.ratings rt GROUP BY r ORDER BY AVG(rt.ratingValue) ASC";
     
         TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
         return query.getResultList();

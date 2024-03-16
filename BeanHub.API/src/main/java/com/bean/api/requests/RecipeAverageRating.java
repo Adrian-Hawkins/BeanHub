@@ -1,4 +1,4 @@
-package com.bean.api.util;
+package com.bean.api.requests;
 
 public class RecipeAverageRating {
     private Long recipeId;
