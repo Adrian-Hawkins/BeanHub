@@ -4,6 +4,9 @@ import com.bean.api.entities.Rating;
 import com.bean.api.entities.Recipe;
 import com.bean.api.entities.User;
 
+import com.bean.api.enums.SortOption;
+import com.bean.api.requests.RecipeAverageRatingRequest;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
@@ -52,7 +55,6 @@ public class RecipeService {
     public Recipe getRecipeById(Long recipeId) {
         return entityManager.find(Recipe.class, recipeId);
     }
-
     @Transactional(readOnly = true)
     public List<Recipe> getFilteredRecipesByUsername(String username) {
         String jpql = "SELECT r FROM Recipe r JOIN r.user u WHERE u.username = :username ORDER BY u.username";
@@ -62,99 +64,81 @@ public class RecipeService {
     }
 
     // @Kay
-    // Switch -> enum
-    // requestparam-why?
-    public List<Recipe> getSortedExplore(@RequestParam(value = "sort", defaultValue = "1") String sort) {
-        String jpql = "SELECT r.recipeId FROM Recipe r";
-        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
-        List<Long> recipeIds = query.getResultList();
+    // Switch -> enum : Resolved
+    // requestparam-why? : Resolved
+    public List<Recipe> getSortedExplore(String sort) {
+        SortOption sortOption = SortOption.valueOf(sort.toUpperCase());
 
-        Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
-
-        switch (sort) {
-            case "1": // newest
-                return getSortedRecipesByDateAdded(recipeIds,
-                        Comparator.nullsLast(Comparator.reverseOrder()));
-            case "2": // oldest
-                return getSortedRecipesByDateAdded(recipeIds,
-                        Comparator.nullsLast(Comparator.naturalOrder()));
-            case "3": // highest rated
-                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
-            case "4": // lowest rated
-                return getSortedRecipesByAverageRating(recipeIds, averageRatings, sort);
+        switch (sortOption) {
+            case NEWEST: 
+                return getSortedRecipesNewest();
+            case OLDEST:
+                return getSortedRecipesOldest();
+            case HIGHEST: 
+                return getSortedRecipesHighest();
+            case LOWEST: 
+                return getSortedRecipesLowest();
             default:
-                return getSortedRecipesByDateAdded(recipeIds,
-                        Comparator.nullsLast(Comparator.reverseOrder()));
+                return getSortedRecipesNewest();
         }
     }
 
     // @Kay
     // What is the return type of the query, Object is not good enough. I want to know what to expect.
     // What is the type of result?
+    //Resolved: Returns a map<recipeid,averageRating>.
+    //RecipeAverageRating is a class that holds recipeID and averageRating 
+    //This is so we can obtain the average ratings all at once for every recipe. 
+    //Then display them using the map and the recipe id as index
     public Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
-        String ratingJpql = "SELECT r.recipe.recipeId, AVG(r.ratingValue) FROM Rating r WHERE r.recipe.recipeId IN :recipeIds GROUP BY r.recipe.recipeId";
-        TypedQuery<Object[]> avgQuery = entityManager.createQuery(ratingJpql, Object[].class);
+        String ratingJpql = "SELECT r.recipeId, AVG(rating.ratingValue) FROM Recipe r LEFT JOIN r.ratings rating WHERE r.recipeId IN :recipeIds GROUP BY r.recipeId";
+    
+        TypedQuery<RecipeAverageRatingRequest> avgQuery = entityManager.createQuery(ratingJpql, RecipeAverageRatingRequest.class);
         avgQuery.setParameter("recipeIds", recipeIds);
-        List<Object[]> results = avgQuery.getResultList();
+    
+        List<RecipeAverageRatingRequest> results = avgQuery.getResultList();
         Map<Long, Double> averageRatings = new HashMap<>();
-        for (Object[] result : results) {
-            Long recipeId = (Long) result[0];
-            Double avgRating = (Double) result[1];
-            averageRatings.put(recipeId, avgRating != null ? avgRating : 0.0);
+    
+        for (RecipeAverageRatingRequest result : results) {
+            averageRatings.put(result.getRecipeId(), result.getAverageRating() != null ? result.getAverageRating() : 0.0);
         }
         return averageRatings;
     }
 
-    // @Kay and @Moshe - I (David) have fixed this function to make it okay.
-    // I am still not happy with what's happening at the return.
-    // Moshe has a similar function to fix, so this one belongs to Kay.
-    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, Comparator<Long> comparator) {
-        // JPQL query that returns all recipes with the recipe IDs in the provided list.
-        String recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds";
-        TypedQuery<Recipe> recipeQuery = entityManager.createQuery(recipeJpql, Recipe.class);
-        // Adds a parameter to the query. Sets the parameter to the list passed in to the function.
-        recipeQuery.setParameter("recipeIds", recipeIds);
-        // Run the query 
-        List<Recipe> recipes = recipeQuery.getResultList();
-        // Sorts the results by their dates.
-        // Ascending or descending is chosen based on the comparator parameter passed in.
-        recipes.sort((recipe1, recipe2) -> { // r1 is now recipe1 and r2 is now recipe2...
-            // date1 is the date that recipe1 was added, same for 2.
-            LocalDateTime date1 = recipe1.getDateAdded();
-            LocalDateTime date2 = recipe2.getDateAdded();
-            // IDK if setting it to null if it is null here is a good idea. Maybe give it a default value earlier instead.
-            return comparator.compare(date1 != null ? date1.toEpochSecond(ZoneOffset.UTC) : null,
-                    date2 != null ? date2.toEpochSecond(ZoneOffset.UTC) : null);
-        });
-        return recipes;
+    //Resolved
+    @Transactional(readOnly = true)
+    private List<Recipe> getSortedRecipesNewest() {
+        String jpql = "SELECT r FROM Recipe r ORDER BY r.dateAdded DESC";;
+        TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
+        return query.getResultList();
+    }
+
+    //Resolved
+    @Transactional(readOnly = true)
+    private List<Recipe> getSortedRecipesOldest() {
+        String jpql = "SELECT r FROM Recipe r ORDER BY r.dateAdded ASC";;
+        TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
+        return query.getResultList();
+    }
+
+    //Resolved
+    @Transactional(readOnly = true)
+    public List<Recipe> getSortedRecipesHighest() {
+        String jpql = "SELECT r FROM Recipe r LEFT JOIN r.ratings rt GROUP BY r ORDER BY AVG(rt.ratingValue) DESC";
+    
+        TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
+        return query.getResultList();
+    }
+
+    //Resolved
+    @Transactional(readOnly = true)
+    public List<Recipe> getSortedRecipesLowest() {
+        String jpql = "SELECT r FROM Recipe r LEFT JOIN r.ratings rt GROUP BY r ORDER BY AVG(rt.ratingValue) ASC";
+    
+        TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
+        return query.getResultList();
     }
     
-    // @Kay - switch->enum
-    private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
-            String sort) {
-        switch (sort) {
-            case "4":
-                recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
-                break;
-            case "3":
-                recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
-                break;
-            default:
-                break;
-        }
-        // Fetch all recipes from the database
-        List<Recipe> allRecipes = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class).getResultList();
-        Map<Long, Recipe> recipeMap = allRecipes.stream()
-                .collect(Collectors.toMap(Recipe::getRecipeId, Function.identity()));
-        List<Recipe> sortedRecipes = new ArrayList<>();
-        for (Long recipeId : recipeIds) {
-            Recipe recipe = recipeMap.get(recipeId);
-            if (recipe != null) {
-                sortedRecipes.add(recipe);
-            }
-        }
-        return sortedRecipes;
-    }
 
     @Transactional(readOnly = true)
     public List<Recipe> getAllRecipes() {

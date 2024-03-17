@@ -4,6 +4,7 @@
 package client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -126,18 +127,18 @@ public class App {
                 case 3:
                     // View my explore page
                     Colors.printColor(Colors.WHITE_BOLD_BRIGHT, "Select filter type.");
-                    String[] filterOptions = { "Newest", "Oldest" };
+                    List<String> filterOptions = Arrays.asList("Newest", "Oldest", "Highest", "Lowest");
 
-                    for (int i = 0; i < filterOptions.length; i++) {
-                        System.out.println(Colors.WHITE_BOLD + (i + 1) + ": " + Colors.RESET + filterOptions[i]);
+                    for (int i = 0; i < filterOptions.size(); i++) {
+                        System.out.println(Colors.WHITE_BOLD + (i + 1) + ": " + Colors.RESET + filterOptions.get(i));
                     }
                     String filterChoice = scanner.nextLine();
+                    int FilterIndex = Integer.parseInt(filterChoice)-1;
+                    String FilterChoice =filterOptions.get(FilterIndex);
 
-                    ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken(), filterChoice); // Make
-                                                                                                              // sure
-                                                                                                              // this
-                    exploreView.UserInteraction(); // changes after auth is
-                    // sorted.
+                    ViewExplore exploreView = new ViewExplore(Authentication.getAccessToken(), FilterChoice); 
+                    exploreView.UserInteraction(); 
+                    
                     break;
                 case 4:
                     // Post a new recipe
