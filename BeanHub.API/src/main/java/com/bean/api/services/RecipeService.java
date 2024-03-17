@@ -63,9 +63,6 @@ public class RecipeService {
         return query.getResultList();
     }
 
-    // @Kay
-    // Switch -> enum : Resolved
-    // requestparam-why? : Resolved
     public List<Recipe> getSortedExplore(String sort) {
         SortOption sortOption = SortOption.valueOf(sort.toUpperCase());
 
@@ -83,13 +80,6 @@ public class RecipeService {
         }
     }
 
-    // @Kay
-    // What is the return type of the query, Object is not good enough. I want to know what to expect.
-    // What is the type of result?
-    //Resolved: Returns a map<recipeid,averageRating>.
-    //RecipeAverageRating is a class that holds recipeID and averageRating 
-    //This is so we can obtain the average ratings all at once for every recipe. 
-    //Then display them using the map and the recipe id as index
     public Map<Long, Double> getAverageRatings(List<Long> recipeIds) {
         String ratingJpql = "SELECT r.recipeId, AVG(rating.ratingValue) FROM Recipe r LEFT JOIN r.ratings rating WHERE r.recipeId IN :recipeIds GROUP BY r.recipeId";
     
@@ -105,7 +95,6 @@ public class RecipeService {
         return averageRatings;
     }
 
-    //Resolved
     @Transactional(readOnly = true)
     private List<Recipe> getSortedRecipesNewest() {
         String jpql = "SELECT r FROM Recipe r ORDER BY r.dateAdded DESC";;
@@ -113,7 +102,6 @@ public class RecipeService {
         return query.getResultList();
     }
 
-    //Resolved
     @Transactional(readOnly = true)
     private List<Recipe> getSortedRecipesOldest() {
         String jpql = "SELECT r FROM Recipe r ORDER BY r.dateAdded ASC";;
@@ -121,7 +109,6 @@ public class RecipeService {
         return query.getResultList();
     }
 
-    //Resolved
     @Transactional(readOnly = true)
     public List<Recipe> getSortedRecipesHighest() {
         String jpql = "SELECT r FROM Recipe r LEFT JOIN r.ratings rt GROUP BY r ORDER BY AVG(rt.ratingValue) DESC";
@@ -130,7 +117,6 @@ public class RecipeService {
         return query.getResultList();
     }
 
-    //Resolved
     @Transactional(readOnly = true)
     public List<Recipe> getSortedRecipesLowest() {
         String jpql = "SELECT r FROM Recipe r LEFT JOIN r.ratings rt GROUP BY r ORDER BY AVG(rt.ratingValue) ASC";
