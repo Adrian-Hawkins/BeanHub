@@ -1,6 +1,6 @@
 package com.bean.api.controllers;
 
-import com.bean.api.enums.RatingEnums;
+import com.bean.api.enums.SortOption;
 import java.util.List;
 import com.bean.api.entities.Recipe;
 import com.bean.api.services.RatingService;
@@ -25,22 +25,22 @@ public class FeedController {
     public List<Recipe> getAllRecipeIngredients(@PathVariable("filterValue") String filterValue,
             @RequestParam("username") String username) {
         int userId = userService.getUserByUsername(username).getUserId();
-        RatingEnums.SortType sortType;
+        SortOption sortType;
         switch (filterValue) {
             case "1":
-                sortType = RatingEnums.SortType.NEWEST;
+                sortType = SortOption.NEWEST;
                 break;
             case "2":
-                sortType = RatingEnums.SortType.OLDEST;
+                sortType = SortOption.OLDEST;
                 break;
             case "3":
-                sortType = RatingEnums.SortType.HIGHESTRATED;
+                sortType = SortOption.HIGHEST;
                 break;
             case "4":
-                sortType = RatingEnums.SortType.LOWESTRATED;
+                sortType = SortOption.LOWEST;
                 break;
             default:
-                sortType = RatingEnums.SortType.NEWEST;
+                sortType = SortOption.NEWEST;
                 break;
         }
         List<Recipe> recipes = ratingService.getSortedFeed(userId, sortType);

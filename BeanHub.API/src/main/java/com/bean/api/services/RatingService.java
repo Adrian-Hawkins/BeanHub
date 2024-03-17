@@ -2,7 +2,6 @@ package com.bean.api.services;
 
 import com.bean.api.entities.Rating;
 import com.bean.api.entities.Recipe;
-import com.bean.api.enums.RatingEnums;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import com.bean.api.enums.SortOption;
 
 @Service
 public class RatingService {
@@ -42,7 +42,7 @@ public class RatingService {
         return entityManager.find(Rating.class, ratingId);
     }
 
-    public List<Recipe> getSortedFeed(int userId, RatingEnums.SortType sortType) {
+    public List<Recipe> getSortedFeed(int userId, SortOption sortType) {
         String jpql = "SELECT r.recipe.recipeId FROM Rating r WHERE r.user.userId = :userId";
         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
         query.setParameter("userId", userId);
@@ -51,9 +51,9 @@ public class RatingService {
         Map<Long, Double> averageRatings = getAverageRatings(recipeIds);
 
         switch (sortType) {
-            case HIGHESTRATED:
+            case HIGHEST:
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortType);
-            case LOWESTRATED:
+            case LOWEST:
                 return getSortedRecipesByAverageRating(recipeIds, averageRatings, sortType);
             default:
                 return getSortedRecipesByDateAdded(recipeIds, sortType);
@@ -72,7 +72,7 @@ public class RatingService {
         return averageRatings;
     }
 
-    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, RatingEnums.SortType sortType) {
+    private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, SortOption sortType) {
         String recipeJpql;
         switch (sortType) {
             case OLDEST:
@@ -90,12 +90,12 @@ public class RatingService {
     }
 
     private List<Recipe> getSortedRecipesByAverageRating(List<Long> recipeIds, Map<Long, Double> averageRatings,
-            RatingEnums.SortType sortEnum) {
+            SortOption sortEnum) {
         switch (sortEnum) {
-            case LOWESTRATED:
+            case LOWEST:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get));
                 break;
-            case HIGHESTRATED:
+            case HIGHEST:
                 recipeIds.sort(Comparator.comparingDouble(averageRatings::get).reversed());
                 break;
             default:
