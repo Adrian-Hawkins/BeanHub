@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,10 +58,10 @@ public class ViewExplore {
             this.maxNumPages = temp;
         }
 
-        List<Long> recipeIds = new ArrayList<>();
+        List<Integer> recipeIds = new ArrayList<>();
         for (int i = 0; i < numRecipes; i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
-            recipeIds.add(currJsonObject.get("recipeId").getAsLong());
+            recipeIds.add(currJsonObject.get("recipeId").getAsInt());
         }
 
         String recipeIdsString = recipeIds.stream()
@@ -78,10 +79,16 @@ public class ViewExplore {
         HttpResponse<String> averageResponse = averageClient.send(averageRequest,
                 HttpResponse.BodyHandlers.ofString());
 
+        JsonObject averageRatingsObject = JsonParser.parseString(averageResponse.body()).getAsJsonObject();
         int recipeId;
+        Double averageRating;
         allRecipes = new FeedExplore[numRecipes];
+
         for (int i = 0; i < numRecipes; i++) {
             JsonObject currJsonObject = jsonarr.get(i).getAsJsonObject();
+            recipeId=currJsonObject.get("recipeId").getAsInt();
+            averageRating = averageRatingsObject.get(String.valueOf(recipeId)).getAsDouble();
+            averageRating = (Math.round(averageRating * 10.00) / 10.00);
             allRecipes[i] = new FeedExplore(
                     currJsonObject.get("recipeId").getAsInt(),
                     currJsonObject.get("recipeName").getAsString(),
@@ -90,7 +97,7 @@ public class ViewExplore {
                     currJsonObject.get("cookingTime").getAsInt(),
                     currJsonObject.get("recipeSteps").getAsString(),
                     currJsonObject.get("dateAdded").getAsString(),
-                    "0.0");
+                    averageRating.toString());
         }
     }
 
