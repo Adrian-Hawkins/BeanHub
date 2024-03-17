@@ -75,13 +75,10 @@ public class RatingService {
     private List<Recipe> getSortedRecipesByDateAdded(List<Long> recipeIds, RatingEnums.SortType sortType) {
         String recipeJpql;
         switch (sortType) {
-            case NEWEST:
-                recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded DESC";
-                break;
             case OLDEST:
                 recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded ASC";
                 break;
-            default:
+            default: // by default it will sort by newest
                 recipeJpql = "SELECT r FROM Recipe r WHERE r.recipeId IN :recipeIds ORDER BY r.dateAdded DESC";
                 break;
         }
