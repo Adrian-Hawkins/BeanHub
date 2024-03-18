@@ -28,6 +28,7 @@ public class App {
     private static boolean hasLoggedIn = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        postRecipe = new PostRecipe();
         Properties val = PropertiesLoader.loadProperties();
         Authentication = new Auth(val.getProperty("client_id"), "http://18.203.89.61");
 

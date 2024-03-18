@@ -12,7 +12,7 @@ import java.util.*;
 
 public class RateRecipe {
     private final Scanner scanner;
-    private final String BASE_URL = System.getenv("BEANHUB_API_URL");
+    private final String BASE_URL = "http://18.203.89.61";
     private final static JSONParser jsonParser = new JSONParser();
 
     public RateRecipe() {

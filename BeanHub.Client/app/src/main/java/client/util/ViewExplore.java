@@ -22,7 +22,7 @@ public class ViewExplore {
     private int pageNumber = 1;
     private int filterOptionNumber = 1;
     private final int maxNumPages;
-    private final String mainURL = System.getenv("BEANHUB_API_URL");
+    private final String mainURL = "http://18.203.89.61";
     private FeedExplore[] allRecipes;
     private final Scanner scanner;
     private final String accessToken;
