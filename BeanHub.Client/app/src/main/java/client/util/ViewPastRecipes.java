@@ -19,7 +19,7 @@ public class ViewPastRecipes {
     private final int pageSize = 5;
     private int pageNumber = 1;
     private final int maxNumPages;
-    private final String mainURL = System.getenv("BEANHUB_API_URL");
+    private final String mainURL = "http://18.203.89.61";
     private List<Recipe> userRecipes;
     private final Scanner scanner;
     private final String accessToken;
