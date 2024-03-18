@@ -126,6 +126,7 @@ public class Auth {
     }
 
     public String getAccessToken() {
+        System.out.println(accessToken);
         return accessToken;
     }
 
